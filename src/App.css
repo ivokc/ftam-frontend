@@ -1,0 +1,58 @@
+h1,h2,h3{
+  text-align: center;
+}
+
+#root .logo {
+  width: 120px;
+  height: 31px;
+  margin: 16px 0;
+  float: left;
+}
+#root .header {
+  background-color: white;
+  padding: 0px 120px;
+}
+#root .content {
+  background-color: white;
+  padding: 15px 120px;
+
+}
+
+#root .header .title {
+  border-width:0 0 0 1px;
+  border-style: solid;
+  margin: 16px 118px 16px 8px;
+  padding: 0 0 0 8px;
+  float: left;
+  font-family: STHeitiTC-Light;
+  font-size: 18px;
+  color: #333333;
+  text-align: center;
+  line-height: 28px;
+}
+#root .header .menu {
+  line-height: 64px;
+
+}
+#root .statusBar{
+  background-image: linear-gradient(-180deg, #006FCC 0%, #0065D2 100%);
+  border: 1px solid #0064D2;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15), inset 0 5px 25px 0 rgba(84,157,221,0.20);
+  height: 35px;
+  padding: 0px 120px;
+  line-height: 32px;
+}
+#root .statusBar .userIcon{
+  color: #FFFFFF;
+}
+#root .statusBar .statusBar-text{
+  font-family: STHeitiTC-Light;
+  font-size: 12px;
+  color: #FFFFFF;
+  letter-spacing: 0;
+  margin: 0 10px;
+}
+#root .content .content-layout {
+  background: #FAFAFA;
+  min-height: 600px;
+}
