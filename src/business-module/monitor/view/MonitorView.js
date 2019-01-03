@@ -55,13 +55,12 @@ class MonitorView extends React.Component {
         <Content className='content-main'>
           <Table
             title={() => '任务状态'}
-            className='table'
             dataSource={dataSource1}
             columns={columns1}
             expandedRowRender={<Table columns={columns1} dataSource={dataSource1} pagination={false}/>}
             size='small' bordered/>
         </Content>
-        <Sider className='content-side' width={400} style={{background:' #FAFAFA'}}>
+        <Sider width={400} style={{background:' #FAFAFA'}}>
           <h3>节点状态</h3>
           <PieChart  data={data}/>
         </Sider>

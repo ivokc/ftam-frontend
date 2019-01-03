@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MonitorView from '../view/MonitorView';
+import SysnodeView from '../view/SysnodeView';
 import {taskMonitorTask} from '../vendor/Task';
 
 
@@ -16,17 +16,17 @@ const monitorInit = async () => {
 
 
 const mapStateToProps = (state) => {
-  global.Just.log('MonitorContainer',state);
+  global.Just.log('SysnodeContainer',state);
   return {
 
   };
 };
 
 const mapDispatchToProps = (dispatch,ownProps) => {
-  global.Just.log('MonitorContainer',ownProps);
+  global.Just.log('SysnodeContainer',ownProps);
 
   return {
     monitorInit: (params) => monitorInit({params,dispatch,ownProps})
   }
 };
-export default connect(mapStateToProps,mapDispatchToProps)(MonitorView);
+export default connect(mapStateToProps,mapDispatchToProps)(SysnodeView);

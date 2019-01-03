@@ -1,10 +1,12 @@
 import React from 'react';
 import { Layout,Menu,Icon,Row,Col,Badge } from 'antd';
 import { Link,Switch} from "react-router-dom";
+import ProtectRoute from '../../router/ProtectRoute';
+
 import MonitorContainer from '../../business-module/monitor/container/MonitorContainer';
 import MissionContainer from '../../business-module/mission/container/MissionContainer';
+import SysnodeContainer from '../../business-module/sysnode/container/SysnodeContainer';
 import VersionContainer from '../../business-module/version/container/VersionContainer';
-import ProtectRoute from '../../router/ProtectRoute';
 
 const {
   Header, Footer, Content,
@@ -41,11 +43,11 @@ class HomeView extends React.Component {
             <Menu.Item key='mission'>
               <Icon type="schedule" />任务管理
             </Menu.Item>
+            <Menu.Item key="sysnode">
+              <Icon type="cluster" />系统节点
+            </Menu.Item>
             <Menu.Item key="version">
               <Icon type="switcher" />版本管理
-            </Menu.Item>
-            <Menu.Item key="log">
-              <Icon type="snippets" />日志
             </Menu.Item>
             <Menu.Item key="report">
               <Icon type="area-chart" />报表
@@ -80,6 +82,7 @@ class HomeView extends React.Component {
           <Switch>
             <ProtectRoute path='/monitor' component={MonitorContainer} />
             <ProtectRoute path='/mission' component={MissionContainer} />
+            <ProtectRoute path='/sysnode' component={SysnodeContainer} />
             <ProtectRoute path='/version' component={VersionContainer} />
 
           </Switch>
