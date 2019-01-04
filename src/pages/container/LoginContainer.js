@@ -1,24 +1,22 @@
 import { connect } from 'react-redux';
 import LoginView from '../view/LoginView';
-import {loginAction} from '../../dataflow/Action';
-import {loginTask,testTask} from '../vendor/Task';
+import {loginTask} from '../vendor/Task';
 
-const handleLogin = async ({params,dispatch,ownProps}) => {
-  // let response = await loginTask(params);
-  // let response = await testTask(params);
-
-  dispatch(loginAction(params));
-  global.JJmHistory.push('/monitor');
+const handleLogin = async ({params,dispatch}) => {
+  try {
+    await loginTask(params,dispatch);
+    global.JJmHistory.push('/monitor');
+  }catch(error){}
 
 }
 
 
 
-const mapDispatchToProps = (dispatch,ownProps) => {
-  global.Just.log('mapDispatchToProps',ownProps);
+
+const mapDispatchToProps = (dispatch) => {
 
   return {
-    handleLogin: (params) => handleLogin({params,dispatch,ownProps})
+    handleLogin: (params) => handleLogin({params,dispatch})
   }
 };
 

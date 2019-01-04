@@ -1,13 +1,13 @@
 
 
-function taskMonitorInterface() {
+function sysnodeListInterface() {
   const params = {
 
   };
-  return global.Just.postRequest(global.Url.taskMonitor,params);
+  return global.Just.postRequest(global.Url.sysnodeList,params);
 }
 
 
 export {
-  taskMonitorInterface
+  sysnodeListInterface
 }

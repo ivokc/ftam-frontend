@@ -1,31 +1,27 @@
 import { connect } from 'react-redux';
 import HomeView from '../view/HomeView';
 import {menuTask} from '../vendor/Task';
+import {getMenuAction} from '../../dataflow/Action';
 
 
-const handleGetMenu = async () => {
-  let response = await menuTask();
-  global.Just.log('handleGetMenu',response);
-
-  // dispatch(loginAction(params));
-  // global.JJmHistory.push('/home');
+const handleGetMenu = ({params,dispatch}) => {
+  menuTask(dispatch);
 }
-
-
 
 
 const mapStateToProps = (state) => {
   global.Just.log('HomeContainer',state);
   return {
-    userInfo: state.userReducer
+    userInfo: state.userReducer,
+    menuInfo: state.menuReducer
   };
 };
 
-const mapDispatchToProps = (dispatch,ownProps) => {
-  global.Just.log('mapDispatchToProps',ownProps);
+const mapDispatchToProps = (dispatch) => {
+  global.Just.log('mapDispatchToProps');
 
   return {
-    handleGetMenu: (params) => handleGetMenu({params,dispatch,ownProps})
+    handleGetMenu: (params) => handleGetMenu({params,dispatch})
   }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(HomeView);

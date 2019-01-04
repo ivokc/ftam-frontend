@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import MonitorView from '../view/MonitorView';
-import {taskMonitorTask} from '../vendor/Task';
+import {monitorInitTask} from '../vendor/Task';
 
 
-const handleMonitorInit = async () => {
-  // let response = await taskMonitorTask();
+const handleMonitorInit = ({params,dispatch}) => {
+  monitorInitTask(dispatch);
 
 
 }
@@ -13,14 +13,16 @@ const handleMonitorInit = async () => {
 
 
 const mapStateToProps = (state) => {
+  global.Just.log('MonitorContainer',state);
   return {
-
+    task:state.monitorReducer.task,
+    sysnode:state.monitorReducer.sysnode,
   };
 };
 
-const mapDispatchToProps = (dispatch,ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    handleMonitorInit: (params) => handleMonitorInit({params,dispatch,ownProps})
+    handleMonitorInit: (params) => handleMonitorInit({params,dispatch})
   }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(MonitorView);

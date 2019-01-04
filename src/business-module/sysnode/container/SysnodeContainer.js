@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SysnodeView from '../view/SysnodeView';
-import {taskMonitorTask} from '../vendor/Task';
+import {sysnodeListTask} from '../vendor/Task';
 
 
-const monitorInit = async () => {
-  // let response = await taskMonitorTask();
-  // global.Just.log('MonitorContainer',response);
+const sysnodeInit = ({params,dispatch}) => {
+  sysnodeListTask(dispatch);
 
-  // dispatch(loginAction(params));
-  // global.JJmHistory.push('/home');
 }
 
 
@@ -22,11 +19,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch,ownProps) => {
-  global.Just.log('SysnodeContainer',ownProps);
+const mapDispatchToProps = (dispatch) => {
 
   return {
-    monitorInit: (params) => monitorInit({params,dispatch,ownProps})
+    sysnodeInit: (params) => sysnodeInit({params,dispatch})
   }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(SysnodeView);

@@ -1,10 +1,15 @@
-import {taskMonitorInterface} from './Interface';
+import {sysnodeListInterface} from './Interface';
+import {getSysnodeListAction} from './dataflow/Action';
 
-function taskMonitorTask(){
-  return taskMonitorInterface();
+async function sysnodeListTask(dispatch){
+  try {
+    let sysnodeList = await sysnodeListInterface();
+    dispatch(getSysnodeListAction(sysnodeList));
+
+  }catch(error){}
 }
 
 
 export {
-  taskMonitorTask
+  sysnodeListTask
 };

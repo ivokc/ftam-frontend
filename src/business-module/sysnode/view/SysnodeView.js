@@ -10,7 +10,7 @@ class MonitorView extends React.Component {
 
 
   componentWillMount() {
-    this.props.monitorInit();
+    this.props.sysnodeInit();
   }
 
   render() {

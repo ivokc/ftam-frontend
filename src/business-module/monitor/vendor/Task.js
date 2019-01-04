@@ -1,10 +1,16 @@
-import {taskMonitorInterface} from './Interface';
+import {taskMonitorInterface,sysnodeMonitorInterface} from './Interface';
+import {getTaskMonitorAction,getSysnodeMonitorAction} from './dataflow/Action';
 
-function taskMonitorTask(){
-  return taskMonitorInterface();
+async function monitorInitTask(dispatch){
+  try {
+    let [tasks, sysnode] = await Promise.all([taskMonitorInterface(), sysnodeMonitorInterface()]);
+    dispatch(getTaskMonitorAction(tasks));
+    dispatch(getSysnodeMonitorAction(sysnode));
+
+  }catch(error){}
 }
 
 
 export {
-  taskMonitorTask
+  monitorInitTask
 };

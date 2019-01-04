@@ -30,6 +30,16 @@ class HomeView extends React.Component {
   }
 
   render() {
+    const {userInfo,menuInfo} = this.props;
+    
+    const menus = !menuInfo ? null : menuInfo.map((v) => {
+      return (
+        <Menu.Item key={v.key}>
+          {v.text}
+        </Menu.Item>
+      );
+    });
+
 
     return (
       <Layout id='HomeView'>
@@ -37,29 +47,7 @@ class HomeView extends React.Component {
           <img className='logo' src={global.Image.BOSlogo}  alt='logo' />
           <span className='title'>文件传输管理平台</span>
           <Menu className='menu' mode="horizontal" defaultSelectedKeys={['monitor']} selectedKeys={[this.state.current]} onClick={this.handleClick}>
-            <Menu.Item key='monitor'>
-              <Icon type="dashboard" />监控
-            </Menu.Item>
-            <Menu.Item key='mission'>
-              <Icon type="schedule" />任务管理
-            </Menu.Item>
-            <Menu.Item key="sysnode">
-              <Icon type="cluster" />系统节点
-            </Menu.Item>
-            <Menu.Item key="version">
-              <Icon type="switcher" />版本管理
-            </Menu.Item>
-            <Menu.Item key="report">
-              <Icon type="area-chart" />报表
-            </Menu.Item>
-            <Menu.Item key="authority">
-              <Icon type="switcher" />权限
-            </Menu.Item>
-            <Menu.Item key="alert">
-              <Badge count={5}>
-                <Icon type="bell" />
-              </Badge>
-            </Menu.Item>
+            { menus }
 
           </Menu>
         </Header>
@@ -67,13 +55,13 @@ class HomeView extends React.Component {
           <Col span={14}>
             <Icon className='userIcon' type='user'/>
             <span className='statusBar-text'>
-              欢迎您，某某某，xxxxxxxx
+              欢迎您，{userInfo.username}
             </span>
           </Col>
           <Col span={10}>
             <Link className='statusBar-text' to="/">[个人设置]</Link>
             <span className='statusBar-text'>
-              登录时间：2019-01-01 11:28:30 AM
+              登录时间：{global.Just.getFormatDate('yyyy-MM-dd hh:mm:ss.S')}
             </span>
             <Link className='statusBar-text' to="/">[退出]</Link>
           </Col>
@@ -83,7 +71,7 @@ class HomeView extends React.Component {
             <ProtectRoute path='/monitor' component={MonitorContainer} />
             <ProtectRoute path='/mission' component={MissionContainer} />
             <ProtectRoute path='/sysnode' component={SysnodeContainer} />
-            <ProtectRoute path='/version' component={VersionContainer} />
+            <ProtectRoute path='/versionManage' component={VersionContainer} />
 
           </Switch>
         </Content>

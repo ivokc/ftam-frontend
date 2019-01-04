@@ -9,16 +9,20 @@
  */
 
 import NetworkUtility from '../utilities/data/NetworkUtility';
-// import DBUtility from '../utilities/data/DBUtility';
+import MessageUtility from '../utilities/ui/MessageUtility';
 import DebugUtility from '../utilities/other/DebugUtility';
+import DateUtility from '../utilities/data/DateUtility';
 
 //functional
 export const FunctionalManager = {
   ...NetworkUtility,
-  ...DebugUtility
+  ...DebugUtility,
+  ...DateUtility
 };
 
 
 //ui
 export const UIManager = {
+  ...MessageUtility
+
 };
