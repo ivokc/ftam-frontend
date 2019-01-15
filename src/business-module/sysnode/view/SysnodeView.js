@@ -1,102 +1,232 @@
 import React from 'react';
-import {Layout,Table, Badge, Menu, Dropdown, Icon,Divider} from 'antd';
-import {PieChart} from '../../../main/components/UIComponents';
+import {Row,Col, Modal,Badge,Button,Divider} from 'antd';
+import {UITable} from '../../../main/components/UIComponents';
+import NewSysForm from '../component/NewSysForm';
+import NewNodeForm from '../component/NewNodeForm';
 
-const {
-  Sider, Content,
-} = Layout;
-class MonitorView extends React.Component {
-  state = {};
 
+class SysnodeView extends React.Component {
+  state = {
+    visible:false,
+    actionType:null,
+    record:null,
+  };
+
+  
 
   componentWillMount() {
     this.props.sysnodeInit();
   }
 
-  render() {
-    const menu = (
-      <Menu>
-        <Menu.Item>
-          Action 1
-        </Menu.Item>
-        <Menu.Item>
-          Action 2
-        </Menu.Item>
-      </Menu>
-    );
-    const columns1 = [
-      { title: 'Name', dataIndex: 'name', key: 'name' },
-      { title: 'Platform', dataIndex: 'platform', key: 'platform' },
-      { title: 'Version', dataIndex: 'version', key: 'version' },
-      { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-      { title: 'Creator', dataIndex: 'creator', key: 'creator' },
-      { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
-      { title: 'Action', key: 'operation', render: () => <a href="javascript:;">Publish</a> },
+
+  renderCurrentStatus = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.sysnode_currentstatus,text)
+    switch (text) {
+      case -2://无响应
+      return <Badge status="error" text={transferedText}/> ;
+      case -1://无法连接
+      return <Badge status="warning" text={transferedText}/> ;
+      case 0://未知
+      return <Badge status="default" text={transferedText}/> ;
+      case 1://有连接无响应
+      return <Badge status="processing" text={transferedText}/> ;
+      case 2://正常响应
+      return <Badge status="success" text={transferedText}/> ;
+      default:
+      return <span>jjm</span> ;
+    }
+  }
+  renderNodeEnable = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.sysnode_enable,text)
+    switch (text) {
+      case 0://禁用
+      return <Badge status="error" text={transferedText}/> ;
+      case 1://启用
+      return <Badge status="success" text={transferedText}/> ;
+      default:
+      return <span>jjm</span> ;
+    }
+  }
+
+  handleEditPress(record,actionType) {
+    this.setState({record,visible:true,actionType});
+  }
+
+  handleCreatePress(record,actionType) {
+    this.setState({record,visible:true,actionType})
+  }
+
+  handleDeletePress(record,actionType) {
+    this.setState({record,actionType});
+
+  }
+
+  handleCancelPress = () => {
+    const form = this.formRef.props.form;
+    this.setState({ visible: false,record:null,actionType:null });
+    form.resetFields();
+  }
+  
+  handleSubmit = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      console.log('Received values of actionType: ', this.state.actionType);
+      console.log('Received values of record: ', this.state.record);
+      console.log('Received values of values: ', values);
+
+      switch (this.state.actionType) {
+        case 'sysAdd':
+          this.props.sysInsert(values);
+          break;
+        case 'sysUpdate':
+          this.props.sysUpdate(values);
+          break;
+        case 'nodeAdd':
+          this.props.nodeInsert({...values,nodeName:values.nodeName1});
+          break;
+        case 'nodeUpdate':
+          this.props.nodeUpdate({...values,nodeName:values.nodeName1});
+          break;
+        default:
+          break;
+      }
+      this.setState({ visible: false,record:null,actionType:null });
+      form.resetFields();
+    });
+  }
+
+
+  prepareMainTableData = () => {
+    let dataSource = [];
+    const columns = [
+      { title: '系统编码', dataIndex: 'sysCode', key: 'sysCode' },
+      { title: '行内标准编码编码', dataIndex: 'pasoCode', key: 'pasoCode',searcher: true },
+      { title: '编号', dataIndex: 'seqNo', key: 'seqNo' },
+      { title: '子序号', dataIndex: 'subSeqNo', key: 'subSeqNo' },
+      { title: '系统名称', dataIndex: 'sysName', key: 'sysName',searcher: true},
+      { title: '描述', dataIndex: 'remark', key: 'remark' },
+      { title: '操作', key: 'operation', 
+        render: (text,record) => 
+          <span>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
+            <Divider type="vertical" />
+            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
+            <Divider type="vertical" />
+            <a href="javascript:;" onClick={this.handleCreatePress.bind(this,record,'nodeAdd')}>添加节点</a>
+          </span> 
+      },
     ];
-    const dataSource1 = [];
-    for (let i = 0; i < 3; ++i) {
-      dataSource1.push({
-        key: i,
-        name: 'Screem',
-        platform: 'iOS',
-        version: '10.3.4.5654',
-        upgradeNum: 500,
-        creator: 'Jack',
-        createdAt: '2014-12-24 23:12:00',
-      });
+   
+    for(let i = 0 ; i < this.props.sysnodeList.length; i++){
+      dataSource.push({
+        key: `mTb${i}`,
+        ...this.props.sysnodeList[i].sys,
+        sysNode: this.props.sysnodeList[i].sysNode
+      })
+    }
+    global.Just.log('jjjjajajajajja-->dataSource',dataSource);
+    global.Just.log('jjjjajajajajja-->columns',columns);
+    return {
+      columns,
+      dataSource
     }
 
+  }
+
+  subTableRender = (record) => {
+    let dataSource2 = [];
     const columns2 = [
-      { title: 'Date', dataIndex: 'date', key: 'date' },
-      { title: 'Name', dataIndex: 'name', key: 'name' },
-      { title: 'Status', key: 'state', render: () => <span><Badge status="success" />Finished</span> },
-      { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-      {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: () => (
-          <span className="table-operation">
-            <a href="javascript:;">Pause</a>
+      { title: '节点编码', dataIndex: 'nodeCode', key: 'nodeCode' },
+      { title: '节点名称', dataIndex: 'nodeName', key: 'nodeName',searcher: true },
+      { title: '端口', dataIndex: 'port', key: 'port' },
+      { title: '节点序号', dataIndex: 'seqNo', key: 'seqNo' },
+      { title: '用户名', dataIndex: 'user', key: 'user' },
+      { 
+        title: '当前状态', dataIndex: 'currentStatus', key: 'currentStatus',
+        render: this.renderCurrentStatus,
+        filters: this.props.dictInfo.sysnode_currentstatus.items.map((ele) => ({text:ele.name,value:ele.code})),
+        onFilter: (value,record) => value == record.currentStatus,
+      },
+      { 
+        title: '启用情况', dataIndex: 'enable', key: 'enable',
+        render: this.renderNodeEnable,
+        filters: this.props.dictInfo.sysnode_enable.items.map((ele) => ({text:ele.name,value:ele.code})),
+        onFilter: (value,record) => {
+          return value == record.enable;
+        },
+      },
+      { title: '主机地址', dataIndex: 'host', key: 'host' },
+      { title: '备注', dataIndex: 'remark', key: 'remark' },
+      { title: '操作', key: 'operation', 
+        render: (text,record) => 
+          <span>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'nodeUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;">Stop</a>
-            <Divider type="vertical" />
-            <Dropdown overlay={menu}>
-              <a href="javascript:;">
-                More <Icon type="down" />
-              </a>
-            </Dropdown>
-          </span>
-        ),
+            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'nodeDelete')}>删除</a>
+          </span> 
       },
     ];
 
-    const dataSource2 = [];
-    for (let i = 0; i < 3; ++i) {
+    for (let j = 0; j < record.sysNode.length; j++) {
       dataSource2.push({
-        key: i,
-        date: '2014-12-24 23:12:00',
-        name: 'This is production name',
-        upgradeNum: 'Upgraded: 56',
-      });
+        key: `sTb${j}`,
+        ...record.sysNode[j]
+      })
     }
+    return <UITable columns={columns2} dataSource={dataSource2} pagination={false} locale={{filterConfirm:'确定',filterReset:'重置',emptyText:'暂无数据'}} size='small'/>
 
+  }
+
+
+  render() {
+
+    global.Just.log('fadfadfadfad',this.props );
+    let columns = [],dataSource = [];
+
+    if(this.props.sysnodeList && this.props.sysnodeList.length > 0 && this.props.dictInfo){
+      ({columns,dataSource} = this.prepareMainTableData());
+    }
     return (
-      <Layout className='content-layout'>
-        <Content className='content-main'>
-
-          <Table
-            title={() => '任务状态'}
-            dataSource={dataSource1}
-            columns={columns1}
-            expandedRowRender={() =>
-              <Table columns={columns2} dataSource={dataSource2} pagination={false} size='small' />
-            }
+      <Row>
+        <Col span={24}>
+          <div style={{marginBottom:'15px'}}>
+            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'sysAdd')} >新建系统</Button>
+            <Modal
+              width={700}
+              visible={this.state.visible}
+              title={this.state.record ? '修改' : '新增'}
+              okText="提交"
+              cancelText="取消"
+              onCancel={this.handleCancelPress}
+              onOk={this.handleSubmit}
+            >
+              {
+                !this.state.actionType ? null : (this.state.actionType.includes('sys') ? 
+                <NewSysForm
+                  record={this.state.record}
+                  wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
+                /> : this.state.actionType.includes('node') ?
+                <NewNodeForm
+                  record={this.state.record}
+                  wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
+                /> : null)
+              }
+             
+            </Modal>
+          </div>
+          <UITable
+            title={() => '系统节点'}
+            dataSource={dataSource}
+            columns={columns}
+            expandedRowRender={this.subTableRender}
             size='small' />
-        </Content>
-      </Layout>
+        </Col>
+      </Row>
     );
   }
 
 }
-export default MonitorView;
+export default SysnodeView;

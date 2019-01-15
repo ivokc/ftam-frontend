@@ -18,8 +18,10 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 
 
 
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+//0088FE蓝
+//00C49F绿
+//FFBB28黄
+//FF8042红
 
 const RADIAN = Math.PI / 180;
 
@@ -29,31 +31,41 @@ export default class UIPieChart extends React.Component {
   render() {
     let data = this.props.data;
     return (
-      <div>
-        <PieChart style={UIPieChart.style.container} width={250} height={250} onMouseEnter={this.onPieEnter}>
-          <Pie
-            data={data}
-            cx='50%'
-            cy='50%'
-            labelLine={false}
-            outerRadius={100}
-            paddingAngle={2}
-            label={renderCustomizedLabel}
-          >
-          {
-            data.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
-          }
-          </Pie>
-        </PieChart>
-        {
-          data.map((entry, index) =>
-            <div style={UIPieChart.style.bb}>
-              <Tag style={UIPieChart.style.tag} color={COLORS[index % COLORS.length]}>{entry.name}</Tag>:
-              <span>  {entry.value}</span>
-            </div>
-          )
-        }
-      </div>
+        data == null || data.length === 0 ? <p style={{textAlign:'center'}}>暂无数据</p> : (
+          <div>
+            <PieChart style={UIPieChart.style.container} width={250} height={250} onMouseEnter={this.onPieEnter}>
+              <Pie
+                dataKey="value"
+                nameKey="name"
+                data={data}
+                cx='50%'
+                cy='50%'
+                labelLine={false}
+                outerRadius={100}
+                paddingAngle={2}
+                label={renderCustomizedLabel}
+              >
+              {
+                data.map((entry, index) => {
+                  
+                  return(
+                    <Cell key={index} fill={entry.color}/>
+                  );
+                
+                })
+              }
+              </Pie>
+            </PieChart>
+            {
+              data.map((entry, index) =>
+                <div key={index} style={UIPieChart.style.bb}>
+                  <Tag style={UIPieChart.style.tag} color={entry.color}>{entry.name}</Tag>:
+                  <span>  {entry.value}</span>
+                </div>
+              )
+            }
+          </div>
+        )
     );
   }
   static style = {

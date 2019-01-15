@@ -8,4 +8,5 @@
  * @Last modified time: 2018-01-26T17:05:12+08:00
  */
 
-export { default as PieChart } from './charts/UIPieChart';
+export { default as UIPieChart } from './charts/UIPieChart';
+export { default as UITable } from './widgets/UITable';

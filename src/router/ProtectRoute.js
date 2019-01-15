@@ -12,7 +12,6 @@ const ProtectRoute = ({component:Component, userInfo, ...rest}) => (
 );
 
 const mapStateToProps = (state) => {
-  global.Just.log('ProtectRoute',state);
   return {
     userInfo: state.userReducer
   };

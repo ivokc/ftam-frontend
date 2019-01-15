@@ -3,10 +3,13 @@ import axios from 'axios';
 const baseURL = global.Constant.baseURL;
 axios.defaults.baseURL = baseURL;
 axios.defaults.withCredentials= true;
+axios.defaults.timeout = 5000;
+
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   global.Just.log('interceptors----->request----->url>>>',config.url);
+  global.Just.log('interceptors----->request----->config>>>',config);
   
   return config;
 }, function (error) {

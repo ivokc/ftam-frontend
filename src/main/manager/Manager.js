@@ -12,12 +12,14 @@ import NetworkUtility from '../utilities/data/NetworkUtility';
 import MessageUtility from '../utilities/ui/MessageUtility';
 import DebugUtility from '../utilities/other/DebugUtility';
 import DateUtility from '../utilities/data/DateUtility';
+import DictUtility from '../utilities/data/DictUtility';
 
 //functional
 export const FunctionalManager = {
   ...NetworkUtility,
   ...DebugUtility,
-  ...DateUtility
+  ...DateUtility,
+  ...DictUtility
 };
 
 

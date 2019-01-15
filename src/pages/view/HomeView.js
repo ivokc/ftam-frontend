@@ -1,12 +1,14 @@
 import React from 'react';
-import { Layout,Menu,Icon,Row,Col,Badge } from 'antd';
+import { Layout,Menu,Icon,Row,Col } from 'antd';
 import { Link,Switch} from "react-router-dom";
 import ProtectRoute from '../../router/ProtectRoute';
 
 import MonitorContainer from '../../business-module/monitor/container/MonitorContainer';
-import MissionContainer from '../../business-module/mission/container/MissionContainer';
+import TaskdefContainer from '../../business-module/task-def/container/TaskdefContainer';
 import SysnodeContainer from '../../business-module/sysnode/container/SysnodeContainer';
-import VersionContainer from '../../business-module/version/container/VersionContainer';
+import VersionManageContainer from '../../business-module/version-manage/container/VersionManageContainer';
+import VersionUpdateContainer from '../../business-module/version-update/container/VersionUpdateContainer';
+import AlertDefContainer from '../../business-module/alert-def/container/AlertDefContainer';
 
 const {
   Header, Footer, Content,
@@ -19,14 +21,14 @@ class HomeView extends React.Component {
 
 
   componentWillMount() {
-    this.props.handleGetMenu();
+    this.props.init();
   }
 
   handleClick = (e) => {
     this.setState({
       current:e.key,
     });
-    this.props.history.push(`/${e.key}`);
+    this.props.history.push(`${e.key}`);
   }
 
   render() {
@@ -34,7 +36,7 @@ class HomeView extends React.Component {
     
     const menus = !menuInfo ? null : menuInfo.map((v) => {
       return (
-        <Menu.Item key={v.key}>
+        <Menu.Item key={v.attributes.url}>
           {v.text}
         </Menu.Item>
       );
@@ -42,7 +44,7 @@ class HomeView extends React.Component {
 
 
     return (
-      <Layout id='HomeView'>
+      <Layout className='layout'>
         <Header className='header'>
           <img className='logo' src={global.Image.BOSlogo}  alt='logo' />
           <span className='title'>文件传输管理平台</span>
@@ -68,10 +70,38 @@ class HomeView extends React.Component {
         </Row>
         <Content className='content'>
           <Switch>
-            <ProtectRoute path='/monitor' component={MonitorContainer} />
-            <ProtectRoute path='/mission' component={MissionContainer} />
-            <ProtectRoute path='/sysnode' component={SysnodeContainer} />
-            <ProtectRoute path='/versionManage' component={VersionContainer} />
+            {
+              !menuInfo ? null : menuInfo.map((v,i) => {
+                let component;
+                switch (v.attributes.url) {
+                  case '/monitor':
+                    component = MonitorContainer;
+                    break;
+                  case '/taskdefManage':
+                      component = TaskdefContainer;
+                      break;
+                  case '/versionManage':
+                    component = VersionManageContainer;
+                    break;
+                  case '/sysnodeManage':
+                    component = SysnodeContainer;
+                    break;
+                  case '/versionUpdate':
+                    component = VersionUpdateContainer;
+                    break;
+                  case '/alertdefManage':
+                    component = AlertDefContainer;
+                    break;
+                  case '/alerteventManage':
+                    component = MonitorContainer;
+                    break;
+                  default:
+                    break;
+                }
+                return <ProtectRoute key={i} path={v.attributes.url} component={component} />
+              })
+            }
+          
 
           </Switch>
         </Content>

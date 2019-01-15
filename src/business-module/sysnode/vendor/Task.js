@@ -1,4 +1,10 @@
-import {sysnodeListInterface} from './Interface';
+import {
+  sysnodeListInterface,
+  sysInsertInterface,
+  nodeInsertInterface,
+  sysUpdateInterface,
+  nodeUpdateInterface
+} from './Interface';
 import {getSysnodeListAction} from './dataflow/Action';
 
 async function sysnodeListTask(dispatch){
@@ -9,7 +15,45 @@ async function sysnodeListTask(dispatch){
   }catch(error){}
 }
 
+async function sysInsertTask(params,dispatch) {
+
+  try {
+    await sysInsertInterface(params);
+    sysnodeListTask(dispatch);
+  } catch (error) {
+  }
+}
+
+async function nodeInsertTask(params,dispatch) {
+  try {
+    await nodeInsertInterface(params);
+    sysnodeListTask(dispatch);
+  } catch (error) {
+  }
+}
+
+async function sysUpdateTask(params,dispatch) {
+
+  try {
+    await sysUpdateInterface(params);
+    sysnodeListTask(dispatch);
+  } catch (error) {
+  }
+}
+
+async function nodeUpdateTask(params,dispatch) {
+  try {
+    await nodeUpdateInterface(params);
+    sysnodeListTask(dispatch);
+  } catch (error) {
+  }
+}
+
 
 export {
-  sysnodeListTask
+  sysnodeListTask,
+  sysInsertTask,
+  nodeInsertTask,
+  sysUpdateTask,
+  nodeUpdateTask
 };

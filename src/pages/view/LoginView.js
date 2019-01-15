@@ -59,7 +59,7 @@ class LoginView extends React.Component {
     background: {
       backgroundImage: `url(${global.Image.loginBg})`,
       width:'100%',
-      height:'780px',
+      height:'100%',
       backgroundRepeat: 'no-repeat',
       backgroundSize: '100% 100%'
     },
@@ -74,8 +74,8 @@ class LoginView extends React.Component {
       width:'343px',
       height:'300px',
       position: 'fixed',
-      top:'228px',
-      right:'140px'
+      top:'30%',
+      right:'14%'
     },
     loginTitle:{
       color:'#333333',

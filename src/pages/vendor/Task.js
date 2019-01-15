@@ -1,5 +1,10 @@
-import {loginInterface ,menuInterface,testInterface} from './Interface';
-import {loginAction,getMenuAction} from '../../dataflow/Action';
+import {loginInterface ,menuInterface,testInterface, dictInterface} from './Interface';
+import {loginAction,getMenuAction,getDictAction} from '../../dataflow/Action';
+
+
+function testTask(){
+  return testInterface();
+}
 
 async function loginTask(params,dispatch) {
   try {
@@ -16,43 +21,22 @@ async function loginTask(params,dispatch) {
 async function menuTask(dispatch){
   try{
     let response = await menuInterface();
-    let menus = response.map((v) => {
-    let key;
-      switch (v.text) {
-        case '监控':
-          key = 'monitor';
-          break;
-        case '版本管理':
-          key = 'versionManage';
-        break;
-        case '任务定义管理':
-          key = 'mission';
-        break;
-        case '节点管理':
-          key = 'sysnode';
-        break;
-        case '版本更新':
-          key = 'versionUpdate';
-        break;
-        case '预警定义':
-          key = 'alert';
-        break;
-        default: key = 'jjm'
-      }
-      return {
-        key: key,
-        text: v.text
-      };
-    });
-    dispatch(getMenuAction(menus))
+    dispatch(getMenuAction(response))
   }catch(error){}
 }
-function testTask(){
-  return testInterface();
+
+async function dictTask(dispatch) {
+  try {
+    let dicts = await dictInterface();
+    dispatch(getDictAction(dicts));
+
+  }catch(error){}
 }
+
 
 export {
   loginTask,
   menuTask,
+  dictTask,
   testTask
 };

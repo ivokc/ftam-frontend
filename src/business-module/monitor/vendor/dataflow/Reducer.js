@@ -6,7 +6,7 @@ import {GET_TASK_MONITOR,GET_SYSNODE_MONITOR} from './Action';
 
 const initialMonitorReducer = {
   task:[],
-  sysnode:{}
+  sysnode:[]
 }
 function monitorReducer(state = initialMonitorReducer, action){
   switch (action.type) {

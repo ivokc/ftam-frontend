@@ -1,24 +1,33 @@
 h1,h2,h3{
   text-align: center;
+  
 }
-
+#root {
+  height: 100%;
+}
 #root .logo {
   width: 120px;
   height: 31px;
   margin: 16px 0;
   float: left;
 }
-#root .header {
+
+#root .layout {
+  min-height: 100%;
+  background-color: white;
+}
+#root .layout .header {
   background-color: white;
   padding: 0px 120px;
 }
-#root .content {
-  background-color: white;
-  padding: 15px 120px;
-
+#root .layout .content {
+  margin: 15px 120px;
+  min-height: 100%;
+  background: #FAFAFA;
+  padding:25px;
 }
 
-#root .header .title {
+#root .layout .header .title {
   border-width:0 0 0 1px;
   border-style: solid;
   margin: 16px 118px 16px 8px;
@@ -30,11 +39,11 @@ h1,h2,h3{
   text-align: center;
   line-height: 28px;
 }
-#root .header .menu {
+#root .layout .header .menu {
   line-height: 64px;
 
 }
-#root .statusBar{
+#root .layout .statusBar{
   background-image: linear-gradient(-180deg, #006FCC 0%, #0065D2 100%);
   border: 1px solid #0064D2;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15), inset 0 5px 25px 0 rgba(84,157,221,0.20);
@@ -42,20 +51,20 @@ h1,h2,h3{
   padding: 0px 120px;
   line-height: 32px;
 }
-#root .statusBar .userIcon{
+#root .layout .statusBar .userIcon{
   color: #FFFFFF;
 }
-#root .statusBar .statusBar-text{
+#root .layout .statusBar .statusBar-text{
   font-family: STHeitiTC-Light;
   font-size: 12px;
   color: #FFFFFF;
   letter-spacing: 0;
   margin: 0 10px;
 }
-#root .content .content-layout {
-  background: #FAFAFA;
-  min-height: 600px;
-}
-#root .content .content-layout .content-main{
-  padding: 25px;
+
+.custom-filter-dropdown{
+  padding: 8px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
 }

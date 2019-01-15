@@ -18,6 +18,8 @@ class App extends Component {
 
 
     global.JJmHistory = createBrowserHistory();
+
+    
   }
 
   render() {

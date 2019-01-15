@@ -6,7 +6,6 @@ import {monitorInitTask} from '../vendor/Task';
 const handleMonitorInit = ({params,dispatch}) => {
   monitorInitTask(dispatch);
 
-
 }
 
 
@@ -17,6 +16,7 @@ const mapStateToProps = (state) => {
   return {
     task:state.monitorReducer.task,
     sysnode:state.monitorReducer.sysnode,
+    dictInfo:state.dictReducer
   };
 };
 

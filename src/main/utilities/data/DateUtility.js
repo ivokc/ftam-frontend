@@ -26,9 +26,19 @@ const DateUtility = {
         if(new RegExp("("+ k +")").test(fmt))   
       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
       return fmt;   
-    } 
-    
+    },
 
+    //生成从minNum到maxNum的随机数
+    randomNum(minNum,maxNum){ 
+      switch(arguments.length){ 
+      case 1: 
+          return parseInt(Math.random()*minNum+1,10); 
+      case 2: 
+          return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+      default: 
+          return 0; 
+      }
+    } 
     
 };
   

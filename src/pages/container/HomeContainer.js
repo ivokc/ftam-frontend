@@ -1,16 +1,15 @@
 import { connect } from 'react-redux';
 import HomeView from '../view/HomeView';
-import {menuTask} from '../vendor/Task';
-import {getMenuAction} from '../../dataflow/Action';
+import {menuTask,dictTask} from '../vendor/Task';
 
 
-const handleGetMenu = ({params,dispatch}) => {
+const handleInit = ({params,dispatch}) => {
   menuTask(dispatch);
+  dictTask(dispatch);
 }
 
 
 const mapStateToProps = (state) => {
-  global.Just.log('HomeContainer',state);
   return {
     userInfo: state.userReducer,
     menuInfo: state.menuReducer
@@ -18,10 +17,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  global.Just.log('mapDispatchToProps');
-
   return {
-    handleGetMenu: (params) => handleGetMenu({params,dispatch})
+    init: (params) => handleInit({params,dispatch}),
   }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(HomeView);
