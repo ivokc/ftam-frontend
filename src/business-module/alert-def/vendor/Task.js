@@ -6,7 +6,6 @@ async function alertDefListTask(dispatch){
     let response = await alertDefListInterface();
     dispatch(getAlertDefListAction(response));
   }catch(error){
-    global.Just.log('foasjfoidf|error',error);
   }
 }
 async function alertDefInsertTask(params,dispatch){
@@ -14,7 +13,6 @@ async function alertDefInsertTask(params,dispatch){
     await alertDefInsertInterface(params);
     alertDefListTask(dispatch)
   }catch(error){
-    global.Just.log('foasjfoidf|error',error);
   }
 }
 

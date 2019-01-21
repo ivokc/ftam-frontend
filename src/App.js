@@ -14,7 +14,6 @@ class App extends Component {
 
 
   componentWillMount(){
-    global.Just.log('App',global.store.getState());
 
 
     global.JJmHistory = createBrowserHistory();

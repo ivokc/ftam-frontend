@@ -12,7 +12,6 @@ const handleMonitorInit = ({params,dispatch}) => {
 
 
 const mapStateToProps = (state) => {
-  global.Just.log('MonitorContainer',state);
   return {
     task:state.monitorReducer.task,
     sysnode:state.monitorReducer.sysnode,

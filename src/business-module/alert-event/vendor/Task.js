@@ -6,7 +6,6 @@ async function alertEventListTask(dispatch){
     let response = await alertEventListInterface();
     dispatch(getalertEventListAction(response));
   }catch(error){
-    global.Just.log('foasjfoidf|error',error);
   }
 }
 

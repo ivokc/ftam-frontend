@@ -12,7 +12,6 @@ class NewVersionForm extends React.Component {
           },
         };
     const { getFieldDecorator } = this.props.form;
-    global.Just.log('NewVersionForm',this.props);
     return (
       <Form>
         <Row gutter={16}>

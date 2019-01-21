@@ -17,8 +17,6 @@ class VersionManageView extends React.Component {
   }
 
   handleCreatePress(record,actionType) {
-    global.Just.log('gwgwggwgw|record',record);
-    global.Just.log('gwgwggwgw|actionType',actionType);
     this.setState({record,visible:true,actionType})
   }
 
@@ -67,8 +65,6 @@ class VersionManageView extends React.Component {
           updatetime: this.props.versionList[i].updatetime
       })
     }
-    global.Just.log('jjjjajajajajja-->dataSource',dataSource);
-    global.Just.log('jjjjajajajajja-->columns',columns);
     return {
       columns,
       dataSource
@@ -77,7 +73,6 @@ class VersionManageView extends React.Component {
   }
   render() {
 
-    global.Just.log('ffffefefeffe',this.props);
     let columns = [],dataSource = [];
 
     if(this.props.versionList && this.props.versionList.length > 0 && this.props.dictInfo){

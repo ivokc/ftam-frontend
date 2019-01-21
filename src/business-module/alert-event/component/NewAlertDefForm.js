@@ -12,7 +12,6 @@ class NewAlertDefForm extends React.Component {
           },
         };
     const { getFieldDecorator } = this.props.form;
-    global.Just.log('NewAlertDefForm',this.props);
 
     return (
       <Form>

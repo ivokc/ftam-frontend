@@ -146,8 +146,6 @@ class TaskdefView extends React.Component {
         taskTrigger:this.props.taskdefList[i].taskTrigger
       })
     }
-    global.Just.log('jjjjajajajajja-->dataSource',dataSource);
-    global.Just.log('jjjjajajajajja-->columns',columns);
     return {
       columns,
       dataSource
@@ -185,7 +183,6 @@ class TaskdefView extends React.Component {
   
   render() {
 
-    global.Just.log('fadfadfadfad',this.props );
     let columns = [],dataSource = [];
 
     if(this.props.taskdefList && this.props.taskdefList.length > 0 && this.props.dictInfo){

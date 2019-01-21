@@ -69,8 +69,6 @@ class MonitorView extends React.Component {
         subTaskEntity: this.props.task[i].subTaskEntity
       })
     }
-    global.Just.log('jjjjajajajajja-->dataSource',dataSource);
-    global.Just.log('jjjjajajajajja-->columns',columns);
     return {
       columns,
       dataSource
@@ -138,13 +136,11 @@ class MonitorView extends React.Component {
           color
       }
     });
-    global.Just.log('jjjjajajajajja-->pieData',pieData);
     return pieData;
   }
 
 
   render() {
-    global.Just.log('asdfasdf',this.props);
 
     let columns = [],dataSource = [],pieData = [];
 

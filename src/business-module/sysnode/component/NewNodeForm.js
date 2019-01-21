@@ -12,7 +12,6 @@ class NewNodeForm extends React.Component {
           },
         };
     const { getFieldDecorator } = this.props.form;
-    global.Just.log('NewNodeForm',this.props);
     return (
       <Form>
         <Row gutter={16}>

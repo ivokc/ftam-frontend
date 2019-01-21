@@ -12,7 +12,6 @@ class NewSysForm extends React.Component {
           },
         };
     const { getFieldDecorator } = this.props.form;
-    global.Just.log('newsysform',this.props);
     return (
       <Form>
         <Row gutter={16}>

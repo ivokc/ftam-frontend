@@ -54,7 +54,6 @@ class NewTaskDefForm extends React.Component {
         };
     const { getFieldDecorator } = this.props.form;
 
-    console.log('fadsddasds',this.props);
     return (
 
       <Modal

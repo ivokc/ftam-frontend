@@ -78,9 +78,6 @@ class SysnodeView extends React.Component {
       if (err) {
         return;
       }
-      console.log('Received values of actionType: ', this.state.actionType);
-      console.log('Received values of record: ', this.state.record);
-      console.log('Received values of values: ', values);
 
       switch (this.state.actionType) {
         case 'sysAdd':
@@ -134,8 +131,6 @@ class SysnodeView extends React.Component {
         sysNode: this.props.sysnodeList[i].sysNode
       })
     }
-    global.Just.log('jjjjajajajajja-->dataSource',dataSource);
-    global.Just.log('jjjjajajajajja-->columns',columns);
     return {
       columns,
       dataSource
@@ -192,7 +187,6 @@ class SysnodeView extends React.Component {
 
   render() {
 
-    global.Just.log('fadfadfadfad',this.props );
     let columns = [],dataSource = [];
 
     if(this.props.sysnodeList && this.props.sysnodeList.length > 0 && this.props.dictInfo){

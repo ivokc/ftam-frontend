@@ -5,7 +5,6 @@ import {alertEventListTask} from '../vendor/Task';
 
 
 const alertEventInit = (params={},dispatch) => {
-  global.Just.log('11111');
   alertEventListTask(dispatch);
 }
 
