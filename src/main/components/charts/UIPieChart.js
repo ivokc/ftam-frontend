@@ -59,7 +59,7 @@ export default class UIPieChart extends React.Component {
             {
               data.map((entry, index) =>
                 <div key={index} style={UIPieChart.style.bb}>
-                  <Tag style={UIPieChart.style.tag} color={entry.color}>{entry.name}</Tag>:
+                  <Tag color={entry.color}>{entry.name}</Tag>:
                   <span>  {entry.value}</span>
                 </div>
               )
@@ -73,8 +73,9 @@ export default class UIPieChart extends React.Component {
       margin: 'auto',
     },
     bb: {
-      width:'40%',
+      width:'120px',
       margin: 'auto',
-    }
+    },
+    
   }
 }

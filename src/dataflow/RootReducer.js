@@ -4,6 +4,7 @@ import {sysnodeReducer} from '../business-module/sysnode/vendor/dataflow/Reducer
 import {versionReducer} from '../business-module/version/vendor/dataflow/Reducer';
 import {alertDefReducer} from '../business-module/alert-def/vendor/dataflow/Reducer';
 import {taskdefReducer} from '../business-module/task-def/vendor/dataflow/Reducer';
+import {alertEventReducer} from '../business-module/alert-event/vendor/dataflow/Reducer';
 
 
 
@@ -60,4 +61,5 @@ export default {
     versionReducer,
     alertDefReducer,
     taskdefReducer,
+    alertEventReducer,
 }

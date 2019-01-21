@@ -3,7 +3,7 @@ import {Row,Col, Modal,Button,Divider} from 'antd';
 import {UITable} from '../../../main/components/UIComponents';
 import NewAlertForm from '../component/NewAlertDefForm';
 
-class AlertDefView extends React.Component {
+class AlertEventView extends React.Component {
   state = {
     visible:false,
     actionType:null,
@@ -11,7 +11,7 @@ class AlertDefView extends React.Component {
   };
 
   componentWillMount() {
-    this.props.alertDefInit();
+    this.props.alertEventInit();
   }
   handleEditPress(record,actionType) {
     this.setState({record,visible:true,actionType});
@@ -53,18 +53,16 @@ class AlertDefView extends React.Component {
       form.resetFields();
     });
   }
-  
+
   prepareMainTableData = () => {
     let dataSource = [];
     const columns = [
       { title: '预警定义编号', dataIndex: 'alertDefId', key: 'alertDefId' },
-      { title: '预警周期', dataIndex: 'alertCycle', key: 'alertCycle'},
-      { title: '预警定义名称', dataIndex: 'alertDefName', key: 'alertDefName',searcher: true },
-      { title: '预警实现', dataIndex: 'alertImpl', key: 'alertImpl' },
       { title: '预警级别', dataIndex: 'alertLevel', key: 'alertLevel' },
-      { title: '预警描述', dataIndex: 'alertRemark', key: 'alertRemark' },
-      { title: '预警时间', dataIndex: 'alertTime', key: 'alertTime' },
-      { title: '任务定义编号', dataIndex: 'taskDefId', key: 'taskDefId' },
+      { title: '事件处理', dataIndex: 'dealing', key: 'dealing' },
+      { title: '事件编号', dataIndex: 'eventId', key: 'eventId' },
+      { title: '事件级别', dataIndex: 'eventLevel', key: 'eventLevel' },
+      { title: '事件描述', dataIndex: 'eventRemark', key: 'eventRemark' },
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
@@ -77,10 +75,10 @@ class AlertDefView extends React.Component {
       },
     ];
    
-    for(let i = 0 ; i < this.props.alertDefList.length; i++){
+    for(let i = 0 ; i < this.props.alertEventList.length; i++){
       dataSource.push({
         key: `mTb${i}`,
-        ...this.props.alertDefList[i]
+        ...this.props.alertEventList[i]
       })
     }
     global.Just.log('jjjjajajajajja-->dataSource',dataSource);
@@ -95,14 +93,13 @@ class AlertDefView extends React.Component {
     global.Just.log('ffffefefeffe',this.props);
     let columns = [],dataSource = [];
 
-    if(this.props.alertDefList && this.props.alertDefList.length > 0 && this.props.dictInfo){
+    if(this.props.alertEventList && this.props.alertEventList.length > 0 && this.props.dictInfo){
       ({columns,dataSource} = this.prepareMainTableData());
     }
     return (
       <Row>
       <Col span={24}>
       <div style={{marginBottom:'15px'}}>
-          <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'alertDefAdd')} >新建预警定义</Button>
           <Modal
             width={700}
             visible={this.state.visible}
@@ -120,7 +117,7 @@ class AlertDefView extends React.Component {
           </Modal>
         </div>
         <UITable
-          title={() => '预警定义'}
+          title={() => '预警事件'}
           dataSource={dataSource}
           columns={columns}
           size='small' />
@@ -130,4 +127,4 @@ class AlertDefView extends React.Component {
   }
 
 }
-export default AlertDefView;
+export default AlertEventView;

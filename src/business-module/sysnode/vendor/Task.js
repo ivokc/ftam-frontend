@@ -3,7 +3,9 @@ import {
   sysInsertInterface,
   nodeInsertInterface,
   sysUpdateInterface,
-  nodeUpdateInterface
+  nodeUpdateInterface,
+  nodeDeleteInterface,
+  sysDeleteInterface
 } from './Interface';
 import {getSysnodeListAction} from './dataflow/Action';
 
@@ -48,12 +50,27 @@ async function nodeUpdateTask(params,dispatch) {
   } catch (error) {
   }
 }
-
+async function sysDeleteTask(params,dispatch) {
+  try {
+    await sysDeleteInterface(params);
+    sysnodeListTask(dispatch);
+  } catch (error) {
+  }
+}
+async function nodeDeleteTask(params,dispatch) {
+  try {
+    await nodeDeleteInterface(params);
+    sysnodeListTask(dispatch);
+  } catch (error) {
+  }
+}
 
 export {
   sysnodeListTask,
   sysInsertTask,
   nodeInsertTask,
   sysUpdateTask,
-  nodeUpdateTask
+  nodeUpdateTask,
+  sysDeleteTask,
+  nodeDeleteTask,
 };

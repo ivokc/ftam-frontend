@@ -1,40 +1,94 @@
 import React from 'react';
-import {Row,Col, Modal,Badge,Button,Divider} from 'antd';
-import NewMissionForm from '../component/NewMissionForm';
+import {Row,Col,Badge,Button,Divider} from 'antd';
+import NewTaskDefForm from '../component/NewTaskDefForm';
+import UpdateTaskDefForm from '../component/UpdateTaskDefForm';
+import UpdateTaskTriggerForm from '../component/UpdateTaskTriggerForm';
 import {UITable} from '../../../main/components/UIComponents';
 
 
 class TaskdefView extends React.Component {
+ 
   state = {
-    visible: false,
-  };
-
-
-  state = {
-    visible:false,
+    newDefvisible:false,
+    updateDefvisible:false,
+    updateTriggervisible:false,
     actionType:null,
     record:null,
-  };
+  }
 
   componentWillMount() {
     this.props.taskdefInit();
   }
   handleEditPress(record,actionType) {
-    this.setState({record,visible:true,actionType});
+    if (actionType === 'taskdefUpdate') {
+      this.setState({record,actionType,updateDefvisible:true,});
+    } else {
+      this.setState({record,actionType,updateTriggervisible:true,});
+    }
   }
 
   handleCreatePress(record,actionType) {
-    this.setState({record,visible:true,actionType})
+    this.setState({record,actionType,newDefvisible:true})
   }
 
   handleDeletePress(record,actionType) {
-    this.setState({record,actionType});
+    this.props.taskdefDelete(record);
   }
 
   handleCancelPress = () => {
-    const form = this.formRef.props.form;
-    this.setState({ visible: false,record:null,actionType:null });
-    form.resetFields();
+    this.setState({ newDefvisible: false,updateDefvisible: false,updateTriggervisible: false,record:null,actionType:null });
+  }
+  handleSubmit = (values) => {
+    switch (this.state.actionType) {
+      case 'taskdeftasktriggerInsert':
+        this.props.taskdeftasktriggerInsert(values);
+        break;
+      case 'taskdefUpdate':
+        this.props.taskdefUpdate(values);
+        break;
+      case 'tasktriggerUpdate':
+        this.props.tasktriggerUpdate(values);
+        break;
+      default:
+        break;
+    }
+    this.setState({ newDefvisible: false,updateDefvisible: false,updateTriggervisible: false,record:null,actionType:null });
+  }
+
+
+
+  renderStatus = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.taskdef_status,text)
+    switch (text) {
+      case 0://失效
+      return <Badge status="default" text={transferedText}/> ;
+      case 1://生效
+      return <Badge status="success" text={transferedText}/> ;
+      default:
+      return <span>text</span> ;
+    }
+  }
+
+  renderSyncStatus = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.taskdef_syncstatus,text)
+    switch (text) {
+      case 0://未同步
+      return <Badge status="default" text={transferedText}/> ;
+      case 1://同步
+      return <Badge status="success" text={transferedText}/> ;
+      default:
+      return <span>text</span> ;
+    }
+  }
+
+  renderTaskDefType = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.taskdef_taskdeftype,text)
+    return transferedText;
+  }
+
+  renderTrigerType = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.tasktrigger_trigertype,text)
+    return transferedText;
   }
 
   prepareMainTableData = () => {
@@ -42,22 +96,26 @@ class TaskdefView extends React.Component {
     const columns = [
       { title: '定义编号', dataIndex: 'taskDefId', key: 'taskDefId' },
       { title: '定义名称', dataIndex: 'taskDefName', key: 'taskDefName',searcher: true},
-      { title: '类型', dataIndex: 'taskDefType', key: 'taskDefType' },
+      { title: '类型', dataIndex: 'taskDefType', key: 'taskDefType', render:this.renderTaskDefType},
       { title: '目标节点', dataIndex: 'destNode', key: 'destNode' },
       { title: '目标路径', dataIndex: 'destPath', key: 'destPath' },
       { title: '生效起始时间', dataIndex: 'startTime', key: 'startTime' },
       { title: '源文件规则', dataIndex: 'srcFileRule', key: 'srcFileRule' },
       { title: '源节点', dataIndex: 'srcNode', key: 'srcNode' },
       { title: '源路径', dataIndex: 'srcPath', key: 'srcPath' },
-      { title: '同步状态', dataIndex: 'syncStatus', key: 'syncStatus' },
-      { title: '状态', dataIndex: 'status', key: 'status' },
+      { 
+        title: '同步状态', dataIndex: 'syncStatus', key: 'syncStatus',render:this.renderSyncStatus
+      },
+      { 
+        title: '状态', dataIndex: 'status', key: 'status', render:this.renderStatus 
+      },
       { title: '描述', dataIndex: 'remark', key: 'remark' },
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'taskdefUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
+            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'taskdefDelete')}>删除</a>
           </span> 
       },
     ];
@@ -75,16 +133,13 @@ class TaskdefView extends React.Component {
       columns,
       dataSource
     }
-
   }
-
-
 
   subTableRender = (record) => {
     let dataSource2 = [];
     const columns2 = [
       { title: '触发编号', dataIndex: 'trigerId', key: 'trigerId' },
-      { title: '触发类型', dataIndex: 'trigerType', key: 'trigerType' },
+      { title: '触发类型', dataIndex: 'trigerType', key: 'trigerType',render:this.renderTrigerType },
       { title: 'Cron表达式', dataIndex: 'cronCause', key: 'cronCause',searcher: true },
       { title: '时间间隔', dataIndex: 'interval', key: 'interval' },
       { title: '间隔单位', dataIndex: 'intervalUnit', key: 'intervalUnit' },
@@ -92,7 +147,7 @@ class TaskdefView extends React.Component {
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'nodeUpdate')}>修改</a>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'tasktriggerUpdate')}>修改</a>
           </span> 
       },
     ];
@@ -121,19 +176,24 @@ class TaskdefView extends React.Component {
       <Row>
         <Col span={24}>
           <div style={{marginBottom:'15px'}}>
-            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'sysAdd')} >新建系统</Button>
-            <Modal
-              width={700}
-              visible={this.state.visible}
-              title={this.state.record ? '修改' : '新增'}
-              okText="提交"
-              cancelText="取消"
-              onCancel={this.handleCancelPress}
-              onOk={this.handleSubmit}
-            >
-             
-             
-            </Modal>
+            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'taskdeftasktriggerInsert')} >新建任务定义和触发</Button>
+            <NewTaskDefForm 
+              dicts={this.props.dictInfo}
+              visible={this.state.newDefvisible}
+              handleSubmit={this.handleSubmit}
+              handleCancelPress={this.handleCancelPress}/>
+            <UpdateTaskDefForm 
+              record={this.state.record}
+              dicts={this.props.dictInfo}
+              visible={this.state.updateDefvisible}
+              handleSubmit={this.handleSubmit}
+              handleCancelPress={this.handleCancelPress}/>
+            <UpdateTaskTriggerForm  
+              record={this.state.record}
+              dicts={this.props.dictInfo}
+              visible={this.state.updateTriggervisible}
+              handleSubmit={this.handleSubmit}
+              handleCancelPress={this.handleCancelPress}/>
           </div>
           <UITable
             title={() => '任务定义'}

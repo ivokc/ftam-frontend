@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row,Col, Modal,Badge,Button,Divider} from 'antd';
+import {Row,Col, Modal,Badge,Button,Divider,Popconfirm} from 'antd';
 import {UITable} from '../../../main/components/UIComponents';
 import NewSysForm from '../component/NewSysForm';
 import NewNodeForm from '../component/NewNodeForm';
@@ -33,7 +33,7 @@ class SysnodeView extends React.Component {
       case 2://正常响应
       return <Badge status="success" text={transferedText}/> ;
       default:
-      return <span>jjm</span> ;
+      return <span>text</span> ;
     }
   }
   renderNodeEnable = (text) => {
@@ -44,7 +44,7 @@ class SysnodeView extends React.Component {
       case 1://启用
       return <Badge status="success" text={transferedText}/> ;
       default:
-      return <span>jjm</span> ;
+      return <span>text</span> ;
     }
   }
 
@@ -57,8 +57,13 @@ class SysnodeView extends React.Component {
   }
 
   handleDeletePress(record,actionType) {
-    this.setState({record,actionType});
-
+    if(actionType === 'sysDelete'){
+      //删除系统
+      this.props.sysDelete(record);
+    }else if(actionType === 'nodeDelete'){
+      //删除节点
+      this.props.nodeDelete(record);
+    }
   }
 
   handleCancelPress = () => {
@@ -113,7 +118,9 @@ class SysnodeView extends React.Component {
           <span>
             <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
+            <Popconfirm title="确定要删除此条?" onConfirm={this.handleDeletePress.bind(this,record,'sysDelete')}  okText="是" cancelText="否">
+              <a href="javascript:;">删除</a>
+            </Popconfirm>
             <Divider type="vertical" />
             <a href="javascript:;" onClick={this.handleCreatePress.bind(this,record,'nodeAdd')}>添加节点</a>
           </span> 
@@ -141,9 +148,10 @@ class SysnodeView extends React.Component {
     const columns2 = [
       { title: '节点编码', dataIndex: 'nodeCode', key: 'nodeCode' },
       { title: '节点名称', dataIndex: 'nodeName', key: 'nodeName',searcher: true },
-      { title: '端口', dataIndex: 'port', key: 'port' },
       { title: '节点序号', dataIndex: 'seqNo', key: 'seqNo' },
       { title: '用户名', dataIndex: 'user', key: 'user' },
+      { title: '主机地址', dataIndex: 'host', key: 'host' },
+      { title: '端口', dataIndex: 'port', key: 'port' },
       { 
         title: '当前状态', dataIndex: 'currentStatus', key: 'currentStatus',
         render: this.renderCurrentStatus,
@@ -158,14 +166,15 @@ class SysnodeView extends React.Component {
           return value == record.enable;
         },
       },
-      { title: '主机地址', dataIndex: 'host', key: 'host' },
       { title: '备注', dataIndex: 'remark', key: 'remark' },
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
             <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'nodeUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'nodeDelete')}>删除</a>
+            <Popconfirm title="确定要删除此条?" onConfirm={this.handleDeletePress.bind(this,record,'nodeDelete')}  okText="是" cancelText="否">
+              <a href="javascript:;">删除</a>
+            </Popconfirm>
           </span> 
       },
     ];

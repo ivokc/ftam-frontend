@@ -9,6 +9,7 @@ import SysnodeContainer from '../../business-module/sysnode/container/SysnodeCon
 import VersionManageContainer from '../../business-module/version-manage/container/VersionManageContainer';
 import VersionUpdateContainer from '../../business-module/version-update/container/VersionUpdateContainer';
 import AlertDefContainer from '../../business-module/alert-def/container/AlertDefContainer';
+import AlertEventContainer from '../../business-module/alert-event/container/AlertEventContainer';
 
 const {
   Header, Footer, Content,
@@ -37,7 +38,7 @@ class HomeView extends React.Component {
     const menus = !menuInfo ? null : menuInfo.map((v) => {
       return (
         <Menu.Item key={v.attributes.url}>
-          {v.text}
+          {v.attributes.url === '/alerteventManage' ? <Icon type="bell" /> : v.text}
         </Menu.Item>
       );
     });
@@ -93,7 +94,7 @@ class HomeView extends React.Component {
                     component = AlertDefContainer;
                     break;
                   case '/alerteventManage':
-                    component = MonitorContainer;
+                    component = AlertEventContainer;
                     break;
                   default:
                     break;

@@ -164,7 +164,7 @@ function dictInterface() {
   //           {
   //               "code": "0",
   //               "dictType": "节点状态",
-  //               "name": "未知"
+  //               "name": "GET_VERSIONMANAGE_LIST"
   //           },
   //           {
   //               "code": "1",

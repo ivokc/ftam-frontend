@@ -23,6 +23,7 @@ axios.interceptors.response.use(function (response) {
   global.Just.log('interceptors----->response----->url>>>',response.config.url);
   global.Just.log('interceptors----->response----->response>>>',response);
   if(response.data.code === '000000'){
+    global.Just.showSuccess(response.data.msg);
     return response.data.data;
   }else{
     global.Just.showError(response.data.msg);

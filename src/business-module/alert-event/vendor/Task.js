@@ -1,10 +1,16 @@
-import {taskMonitorInterface} from './Interface';
+import {alertEventListInterface} from './Interface';
+import {getalertEventListAction} from './dataflow/Action';
 
-function taskMonitorTask(){
-  return taskMonitorInterface();
+async function alertEventListTask(dispatch){
+  try {
+    let response = await alertEventListInterface();
+    dispatch(getalertEventListAction(response));
+  }catch(error){
+    global.Just.log('foasjfoidf|error',error);
+  }
 }
 
 
 export {
-  taskMonitorTask
+  alertEventListTask,
 };

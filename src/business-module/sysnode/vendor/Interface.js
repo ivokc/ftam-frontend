@@ -39,17 +39,17 @@ function sysUpdateInterface({pasoCode,remark,seqNo,subSeqNo,sysCode,sysName}) {
 
 //删除系统
 function sysDeleteInterface({sysCode}) {
+
   const params = {
     sysCode	//系统编码
   }
-  return global.Just.postRequest(global.Url.sysDelete,params);
+  return global.Just.postRequest(global.Url.sysDelete+`/${sysCode}`,params);
 }
 
 //新增节点
-function nodeInsertInterface({host,nodeCode,nodeName,port,remark,seqNo,sysCode,user,version}) {
+function nodeInsertInterface({host,nodeName,port,remark,seqNo,sysCode,user,version}) {
   const params = {
     host,// 	主机地址
-    nodeCode,//	节点编码
     nodeName,// 	节点名称
     port,//	端口
     remark,// 	备注
@@ -76,13 +76,13 @@ function nodeUpdateInterface({host,nodeCode,nodeName,port,remark,seqNo,sysCode,u
   }
   return global.Just.postRequest(global.Url.sysnodeUpdate,params);
 }
-//修改节点
+//删除节点
 function nodeDeleteInterface({nodeCode}) {
   const params = {
     nodeCode,//	节点编码
    
   }
-  return global.Just.postRequest(global.Url.sysnodeDelete,params);
+  return global.Just.postRequest(global.Url.sysnodeDelete+`/${nodeCode}`,params);
 }
 
 export {

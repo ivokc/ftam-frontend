@@ -30,7 +30,7 @@ class MonitorView extends React.Component {
       case -1://发送失败
       return <Badge status="error" text={transferedText}/> ;
       default:
-      return <span>未知</span> ;
+      return <span>text</span> ;
     }
   }
 
@@ -120,7 +120,7 @@ class MonitorView extends React.Component {
         case -1://无法连接
           color = '#FFBB28'
           break;
-        case 0://未知
+        case 0://GET_VERSIONMANAGE_LIST
           color = '#cccccc'
           break;
         case 1://有连接无响应

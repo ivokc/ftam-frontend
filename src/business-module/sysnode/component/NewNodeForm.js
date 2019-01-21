@@ -17,22 +17,22 @@ class NewNodeForm extends React.Component {
       <Form>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item {...formItemLayout} label="节点编码:">
-              {getFieldDecorator('nodeCode', {
-                initialValue: this.props.record.nodeCode ? this.props.record.nodeCode : null,
-                rules: [{ required: true, message: '请填写节点编码!' }],
-              })(
-                <Input disabled={this.props.record.nodeCode ? true : false}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
             <Form.Item {...formItemLayout} label="节点名称:">
               {getFieldDecorator('nodeName1', {
                 initialValue: this.props.record.nodeCode ? this.props.record.nodeName : null,
                 rules: [{ required: true, message: '请填写节点名称!' }],
               })(
                 <Input />
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            
+            <Form.Item>
+              {getFieldDecorator('nodeCode', {
+                initialValue: this.props.record.nodeCode ? this.props.record.nodeCode : null,
+              })(
+              <div/>
               )}
             </Form.Item>
           </Col>

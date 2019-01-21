@@ -1,13 +1,12 @@
 
-
-function taskMonitorInterface() {
+//拉预警定义表
+function alertEventListInterface() {
   const params = {
 
   };
-  return global.Just.postRequest(global.Url.taskMonitor,params);
+  return global.Just.postRequest(global.Url.alertEventList,params);
 }
 
-
 export {
-  taskMonitorInterface
+  alertEventListInterface,
 }
