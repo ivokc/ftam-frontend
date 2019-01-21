@@ -98,13 +98,13 @@ function taskdefEnableInterface({taskDefId}) {
   const params = {
     taskDefId,	//任务定义编号
   };
-  return global.Just.postRequest(global.Url.tasktriggerUpdate+`/${taskDefId}`,params);
+  return global.Just.postRequest(global.Url.taskdefEnable+`/${taskDefId}`,params);
 }
 function taskdefDisableInterface({taskDefId}) {
   const params = {
     taskDefId,	//任务定义编号
   };
-  return global.Just.postRequest(global.Url.tasktriggerUpdate+`/${taskDefId}`,params);
+  return global.Just.postRequest(global.Url.taskdefDisable+`/${taskDefId}`,params);
 }
 
 

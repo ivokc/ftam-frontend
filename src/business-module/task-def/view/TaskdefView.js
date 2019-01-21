@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row,Col,Badge,Button,Divider} from 'antd';
+import {Row,Col,Badge,Button,Divider,Popconfirm} from 'antd';
 import NewTaskDefForm from '../component/NewTaskDefForm';
 import UpdateTaskDefForm from '../component/UpdateTaskDefForm';
 import UpdateTaskTriggerForm from '../component/UpdateTaskTriggerForm';
@@ -19,11 +19,21 @@ class TaskdefView extends React.Component {
   componentWillMount() {
     this.props.taskdefInit();
   }
-  handleEditPress(record,actionType) {
+  handleActionPress(record,actionType) {
     if (actionType === 'taskdefUpdate') {
       this.setState({record,actionType,updateDefvisible:true,});
-    } else {
+    } else if(actionType === 'updateTriggervisible'){
       this.setState({record,actionType,updateTriggervisible:true,});
+    } else if(actionType === 'taskdefDelete'){
+      this.props.taskdefDelete(record);
+    } else if(actionType === 'taskdefSync'){
+      this.props.taskdefSync(record);
+    } else if(actionType === 'taskdefTest'){
+      this.props.taskdefTest(record);
+    } else if(actionType === 'taskdefEnable'){
+      this.props.taskdefEnable(record);
+    }else if(actionType === 'taskdefDisable'){
+      this.props.taskdefDisable(record);
     }
   }
 
@@ -31,10 +41,7 @@ class TaskdefView extends React.Component {
     this.setState({record,actionType,newDefvisible:true})
   }
 
-  handleDeletePress(record,actionType) {
-    this.props.taskdefDelete(record);
-  }
-
+ 
   handleCancelPress = () => {
     this.setState({ newDefvisible: false,updateDefvisible: false,updateTriggervisible: false,record:null,actionType:null });
   }
@@ -113,9 +120,21 @@ class TaskdefView extends React.Component {
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'taskdefUpdate')}>修改</a>
+            <a href="javascript:;" onClick={this.handleActionPress.bind(this,record,'taskdefUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'taskdefDelete')}>删除</a>
+            <Popconfirm title="确定要删除此任务?" onConfirm={this.handleActionPress.bind(this,record,'taskdefDelete')}  okText="是" cancelText="否">
+              <a href="javascript:;">删除</a>
+            </Popconfirm>
+            <Divider type="vertical" />
+            <Popconfirm title="确定同步此任务?" onConfirm={this.handleActionPress.bind(this,record,'taskdefSync')}  okText="是" cancelText="否">
+              <a href="javascript:;">同步</a>
+            </Popconfirm>
+            <Divider type="vertical" />
+            <Popconfirm title="确定测试此任务?" onConfirm={this.handleActionPress.bind(this,record,'taskdefTest')}  okText="是" cancelText="否">
+              <a href="javascript:;">测试</a>
+            </Popconfirm>
+            <Divider type="vertical" />
+            <a href="javascript:;" onClick={this.handleActionPress.bind(this,record,record.status === 1 ?  'taskdefDisable' : 'taskdefEnable')}>{record.status === 1 ? '禁用' : '启用'}</a>
           </span> 
       },
     ];
@@ -147,7 +166,7 @@ class TaskdefView extends React.Component {
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'tasktriggerUpdate')}>修改</a>
+            <a href="javascript:;" onClick={this.handleActionPress.bind(this,record,'tasktriggerUpdate')}>修改</a>
           </span> 
       },
     ];
