@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Input ,Col,Row,DatePicker,Modal,Select} from 'antd';
+import {Form, Input ,Col,Row,DatePicker,Modal,Select,TreeSelect} from 'antd';
 import moment from 'moment';
 
 const Option = Select.Option;
@@ -32,6 +32,18 @@ class UpdateTaskDefForm extends React.Component {
           },
         };
     const { getFieldDecorator } = this.props.form;
+
+    let treeData = !this.props.nodeInfo ? null : this.props.nodeInfo.map((mainele) => ({
+      title: mainele.sys.sysName,
+      value: mainele.sys.sysCode,
+      key: mainele.sys.sysCode,
+      children: mainele.sysNode.map((subele) => ({
+        title: subele.nodeName,
+        value: subele.nodeCode,
+        key: subele.nodeCode,
+      })),
+    }));
+
 
     return (
 
@@ -70,18 +82,64 @@ class UpdateTaskDefForm extends React.Component {
             <Col span={12}>
               <Form.Item {...formItemLayout} label="目标节点:">
                 {getFieldDecorator('destNode', {
-                  initialValue: this.props.record ? this.props.record.destNode : null,
+                  initialValue: this.props.record ? this.props.record.destNode.split(',') : null,
                   rules: [{ required: true, message: '请填写 目标节点!' }],
+                })(
+                  <TreeSelect 
+                    treeData={treeData}
+                    // showSearch
+                    style={{ width: 520 }}
+                    // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder="请选择"
+                    treeCheckable={true}
+                    showCheckedStrategy='SHOW_PARENT'
+                    allowClear
+                    treeDefaultExpandAll
+                    onChange={this.onChange}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item {...formItemLayout} label="源节点:">
+                {getFieldDecorator('srcNode', {
+                  initialValue: this.props.record ? this.props.record.srcNode.split(',') : null,
+                  rules: [{ required: true, message: '请填写 源节点!' }],
+                })(
+                  <TreeSelect 
+                    treeData={treeData}
+                    // showSearch
+                    style={{ width: 520 }}
+                    // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder="请选择"
+                    treeCheckable={true}
+                    showCheckedStrategy='SHOW_PARENT'
+                    allowClear
+                    treeDefaultExpandAll
+                    onChange={this.onChange}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item {...formItemLayout} label="目标路径:">
+                {getFieldDecorator('destPath', {
+                  initialValue: this.props.record ? this.props.record.destPath : null,
+                  rules: [{ required: true, message: '请填写 目标路径!' }],
                 })(
                   <Input  />
                 )}
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item {...formItemLayout} label="目标路径:">
-                {getFieldDecorator('destPath', {
-                  initialValue: this.props.record ? this.props.record.destPath : null,
-                  rules: [{ required: true, message: '请填写 目标路径!' }],
+              <Form.Item {...formItemLayout} label="源路径:">
+                {getFieldDecorator('srcPath', {
+                  initialValue: this.props.record ? this.props.record.srcPath : null,
+                  rules: [{ required: true, message: '请填写 源路径!' }],
                 })(
                   <Input  />
                 )}
@@ -116,28 +174,6 @@ class UpdateTaskDefForm extends React.Component {
                     placeholder="请选择时间"
                     locale={{lang:{"ok": "👌","now": "现在","timeSelect": "兄dei,请选择🕙",}}}
                   />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayout} label="源节点:">
-                {getFieldDecorator('srcNode', {
-                  initialValue: this.props.record ? this.props.record.srcNode : null,
-                  rules: [{ required: true, message: '请填写 源节点!' }],
-                })(
-                  <Input  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayout} label="源路径:">
-                {getFieldDecorator('srcPath', {
-                  initialValue: this.props.record ? this.props.record.srcPath : null,
-                  rules: [{ required: true, message: '请填写 源路径!' }],
-                })(
-                  <Input  />
                 )}
               </Form.Item>
             </Col>

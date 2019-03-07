@@ -1,6 +1,8 @@
 import React from 'react';
-import {Form, Input,Col,Row,TimePicker} from 'antd';
+import {Form, Input,Col,Row,Select,TimePicker} from 'antd';
+import moment from 'moment';
 
+const Option = Select.Option;
 class NewAlertDefForm extends React.Component {
   render() {
     const formItemLayout = {
@@ -15,7 +17,7 @@ class NewAlertDefForm extends React.Component {
 
     return (
       <Form>
-        <Row gutter={16}>
+        <Row gutter={24}>
           <Col span={12}>
           <Form.Item {...formItemLayout} label="预警定义名称:">
               {getFieldDecorator('alertDefName', {
@@ -85,20 +87,31 @@ class NewAlertDefForm extends React.Component {
           <Col span={12}>
           <Form.Item {...formItemLayout} label="预警时间:">
               {getFieldDecorator('alertTime', {
-                initialValue: this.props.record ? this.props.record.alertTime : null,
+                initialValue: this.props.record ? moment(this.props.record.alertTime, 'HH:mm:ss') : null,
                 rules: [{ required: true, message: '请填写预警时间!' }],
               })(
-                <TimePicker/>
+                <TimePicker />
               )}
             </Form.Item>
           </Col>
+        </Row>
+        <Row gutter={24}>
           <Col span={12}>
-            <Form.Item {...formItemLayout} label="任务定义编号:">
+            <Form.Item {...formItemLayout} label="任务定义:">
               {getFieldDecorator('taskDefId', {
                 initialValue: this.props.record ? this.props.record.taskDefId : null,
                 rules: [{ required: true, message: '请填写任务定义编号!' }],
               })(
-                <Input />
+                <Select style={{width:520}} dropdownMatchSelectWidth={false}>
+                  
+                  {
+                    this.props.taskdefList ? this.props.taskdefList.map((ele,i) => 
+                    <Option key={i} value={ele.taskDef.taskDefId}>
+                      名称:{ele.taskDef.taskDefName} | 源节点:{ele.taskDef.srcNode} | 目标节点:{ele.taskDef.destNode}
+                    </Option>
+                  ) : null
+                  }
+                </Select>
               )}
             </Form.Item>
           </Col>

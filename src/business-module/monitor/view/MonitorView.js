@@ -4,7 +4,10 @@ import {UIPieChart,UITable} from '../../../main/components/UIComponents';
 
 
 class MonitorView extends React.Component {
-  state = {};
+  state = {
+
+    jjm:0
+  };
 
   constructor() {
     super();
@@ -42,11 +45,13 @@ class MonitorView extends React.Component {
     let dataSource = [];
     let columns = [
       {title: '任务编号',dataIndex: 'taskId',key: 'taskId'}, 
-      {title: '源路径',dataIndex: 'scanPath',key: 'scanPath', searcher: true,}, 
-      {title: '源节点',dataIndex: 'srcNode',key: 'srcNode',searcher: true,}, 
+      {title: '源路径',dataIndex: 'scanPath',key: 'scanPath', searcher: true}, 
+      {title: '源节点',dataIndex: 'srcNode',key: 'srcNode', searcher: true}, 
+      {title: '创建时间',dataIndex: 'createTime',key: 'createTime', searcher: true}, 
       {
         title: '状态',dataIndex: 'status',key: 'status', 
         render: this.renderStatus,
+        
         filters: this.props.dictInfo.task_status.items.map((ele) => ({text:ele.name,value:ele.code})),
         onFilter: (value,record) => value == record.status,
       },
@@ -64,6 +69,7 @@ class MonitorView extends React.Component {
         scanPath: this.props.task[i].task.scanPath,
         srcNode: this.props.task[i].task.srcNode,
         status: this.props.task[i].task.status,
+        createTime: this.props.task[i].task.createTime,
         fileName: this.props.task[i].task.fileName,
         fileSize: this.props.task[i].task.fileSize,
         subTaskEntity: this.props.task[i].subTaskEntity
@@ -85,6 +91,7 @@ class MonitorView extends React.Component {
       {
         title: '状态',dataIndex: 'status',key: 'status',
         render: this.renderStatus,
+        
         filters: this.props.dictInfo.task_status.items.map((ele) => ({text:ele.name,value:ele.code})),
         onFilter: (value,record) => value == record.status,
       }, 
@@ -102,7 +109,7 @@ class MonitorView extends React.Component {
         transferPercent: record.subTaskEntity[j].transferPercent,
       })
     }
-    return <UITable columns={columns2} dataSource={dataSource2} pagination={false} locale={{filterConfirm:'确定',filterReset:'重置',emptyText:'暂无数据'}} size='small'/>
+    return <UITable searchText={this.props.searchText} columns={columns2} dataSource={dataSource2} pagination={false} locale={{filterConfirm:'确定',filterReset:'重置',emptyText:'暂无数据'}} size='small'/>
 
   }
 
@@ -141,7 +148,6 @@ class MonitorView extends React.Component {
 
 
   render() {
-
     let columns = [],dataSource = [],pieData = [];
 
     if(this.props.task && this.props.task.length > 0 && this.props.dictInfo){
@@ -157,17 +163,18 @@ class MonitorView extends React.Component {
       <Row >
         <Col span={16}>
           <UITable
-            title={() => '任务状态'}
+            title='任务状态'
             dataSource={dataSource}
             columns={columns}
             expandedRowRender={this.subTableRender}
             locale={{filterConfirm:'确定',filterReset:'重置',emptyText:'暂无数据'}}
             size='small'
+            searchText={this.props.searchText}
             />
         </Col>
         <Col span={8}>
           <h3>节点状态</h3>
-          <UIPieChart data={pieData}/>
+          <UIPieChart data={pieData} onPieClick={(obj) => this.props.history.push('sysnodeManage')}/>
         </Col>
       </Row>
       

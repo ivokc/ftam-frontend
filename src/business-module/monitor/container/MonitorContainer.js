@@ -15,7 +15,8 @@ const mapStateToProps = (state) => {
   return {
     task:state.monitorReducer.task,
     sysnode:state.monitorReducer.sysnode,
-    dictInfo:state.dictReducer
+    dictInfo:state.dictReducer,
+    searchText:state.searchReducer.searchText
   };
 };
 

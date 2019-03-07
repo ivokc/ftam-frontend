@@ -1,7 +1,7 @@
 import {GET_VERSIONMANAGE_LIST} from './Action';
 
 
-function versionReducer(state = null, action){
+function versionManageReducer(state = null, action){
   switch (action.type) {
     case GET_VERSIONMANAGE_LIST:
       return [
@@ -13,5 +13,5 @@ function versionReducer(state = null, action){
 }
 
 export {
-  versionReducer,
+  versionManageReducer,
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row , Col ,Button,Modal,Divider} from 'antd';
+import {Row , Col ,Button,Modal,Divider,Badge,Popconfirm} from 'antd';
 import NewVersionForm from '../component/NewVersionForm';
 import {UITable} from '../../../main/components/UIComponents';
 
@@ -22,8 +22,7 @@ class VersionManageView extends React.Component {
   }
 
   handleDeletePress(record,actionType) {
-    this.setState({record,actionType});
-
+    this.props.versionDelete(record);
   }
 
   handleCancelPress = () => {
@@ -32,24 +31,69 @@ class VersionManageView extends React.Component {
     form.resetFields();
   }
 
+
+
+
+  
+//   versionInsert
+// versionUpdate
+// versionDelete
+  handleSubmit = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      switch (this.state.actionType) {
+        case 'versionInsert':
+          this.props.versionInsert(values);
+          break;
+        case 'versionUpdate':
+          this.props.versionUpdate({...this.state.record,...values});
+          break;
+        default:
+          break;
+      }
+      this.setState({ visible: false,record:null,actionType:null });
+      form.resetFields();
+    });
+  }
+
+  renderStatus = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.version_status,text)
+    switch (text) {
+      case 0://其他版本
+      return <Badge status="default" text={transferedText}/> ;
+      case 1://最新版本
+      return <Badge status="success" text={transferedText}/> ;
+      default:
+      return <span>text</span> ;
+    }
+  }
+
+
   prepareMainTableData = () => {
     let dataSource = [];
     const columns = [
       { title: '编号', dataIndex: 'verId', key: 'verId' },
       { title: '版本号', dataIndex: 'version', key: 'version'},
       { title: '更新包', dataIndex: 'filename', key: 'filename',searcher: true },
-      { title: '状态', dataIndex: 'status', key: 'status' },
+      { title: '状态', dataIndex: 'status', key: 'status',
+        render: this.renderStatus,
+        filters: this.props.dictInfo.version_status.items.map((ele) => ({text:ele.name,value:ele.code})),
+        onFilter: (value,record) => value == record.status,
+      },
       { title: '描述', dataIndex: 'remark', key: 'remark' },
-      { title: '创建时间', dataIndex: 'createtime', key: 'createtime' },
-      { title: '更新时间', dataIndex: 'updatetime', key: 'updatetime' },
+      { title: '创建时间', dataIndex: 'createtime', key: 'createtime'},
+      { title: '更新时间', dataIndex: 'updatetime', key: 'updatetime'},
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'versionUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
-            <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleCreatePress.bind(this,record,'nodeAdd')}>添加节点</a>
+            <Popconfirm title="确定要删除此条?" onConfirm={this.handleDeletePress.bind(this,record,'versionDelete')}  okText="是" cancelText="否">
+              <a href="javascript:;">删除</a>
+            </Popconfirm>
           </span> 
       },
     ];
@@ -62,8 +106,8 @@ class VersionManageView extends React.Component {
           filename: this.props.versionList[i].filename,
           status: this.props.versionList[i].status,
           remark: this.props.versionList[i].remark,
-          createtime: this.props.versionList[i].createtime,
-          updatetime: this.props.versionList[i].updatetime
+          createtime: global.Just.getFormatDate('yyyy-MM-dd hh:mm:ss',this.props.versionList[i].createtime),
+          updatetime: global.Just.getFormatDate('yyyy-MM-dd hh:mm:ss',this.props.versionList[i].updatetime),
       })
     }
     return {
@@ -73,7 +117,7 @@ class VersionManageView extends React.Component {
 
   }
   render() {
-
+    
     let columns = [],dataSource = [];
 
     if(this.props.versionList && this.props.versionList.length > 0 && this.props.dictInfo){
@@ -83,7 +127,7 @@ class VersionManageView extends React.Component {
       <Row>
         <Col span={24}>
         <div style={{marginBottom:'15px'}}>
-            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'sysAdd')} >新建版本</Button>
+            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'versionInsert')} >新建版本</Button>
             <Modal
               width={700}
               visible={this.state.visible}
@@ -93,18 +137,19 @@ class VersionManageView extends React.Component {
               onCancel={this.handleCancelPress}
               onOk={this.handleSubmit}
             >
-            <NewVersionForm
-              record={this.state.record}
-              wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
-            /> 
-             
+              <NewVersionForm
+                record={this.state.record}
+                wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
+              /> 
             </Modal>
           </div>
           <UITable
-            title={() => '版本管理'}
+            title='版本管理'
             dataSource={dataSource}
             columns={columns}
-            size='small' />
+            size='small' 
+            searchText={this.props.searchText}
+            />
         </Col>
       </Row>
     );

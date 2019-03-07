@@ -16,6 +16,14 @@ const MessageUtility = {
 
     showWarning(text) {
         message.warning(text);
+    },
+
+    showLoading() {
+      global.Switch.loading = true;
+    },
+
+    hideLoading() {
+      global.Switch.loading = false;
     }
 
 }

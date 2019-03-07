@@ -1,7 +1,7 @@
 import React from 'react';
-import {Row,Col, Modal,Button,Divider} from 'antd';
+import {Row,Col, Modal,Badge} from 'antd';
 import {UITable} from '../../../main/components/UIComponents';
-import NewAlertForm from '../component/NewAlertDefForm';
+import NewAlertEventForm from '../component/NewAlertEventForm';
 
 class AlertEventView extends React.Component {
   state = {
@@ -50,24 +50,32 @@ class AlertEventView extends React.Component {
       form.resetFields();
     });
   }
-
+  renderDealing = (text) => {
+    let transferedText = global.Just.getDictValue(this.props.dictInfo.alertevent_dealing,text)
+    switch (text) {
+      case 'ignore'://忽略
+      return <Badge status="Default" text={transferedText}/> ;
+      case 'deal'://已处理
+      return <Badge status="Success" text={transferedText}/> ;
+      case 'undeal'://未处理
+      return <Badge status="Error" text={transferedText}/> ;
+      default:
+      return <span>text</span> ;
+    }
+  }
   prepareMainTableData = () => {
     let dataSource = [];
     const columns = [
       { title: '预警定义编号', dataIndex: 'alertDefId', key: 'alertDefId' },
       { title: '预警级别', dataIndex: 'alertLevel', key: 'alertLevel' },
-      { title: '事件处理', dataIndex: 'dealing', key: 'dealing' },
+      { title: '事件处理', dataIndex: 'dealing', key: 'dealing', render: this.renderDealing,},
       { title: '事件编号', dataIndex: 'eventId', key: 'eventId' },
       { title: '事件级别', dataIndex: 'eventLevel', key: 'eventLevel' },
       { title: '事件描述', dataIndex: 'eventRemark', key: 'eventRemark' },
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
-            <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
-            <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleCreatePress.bind(this,record,'nodeAdd')}>添加节点</a>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'alertEventDeal')}>修改</a>
           </span> 
       },
     ];
@@ -86,7 +94,6 @@ class AlertEventView extends React.Component {
   }
   render() {
     let columns = [],dataSource = [];
-
     if(this.props.alertEventList && this.props.alertEventList.length > 0 && this.props.dictInfo){
       ({columns,dataSource} = this.prepareMainTableData());
     }
@@ -103,15 +110,16 @@ class AlertEventView extends React.Component {
             onCancel={this.handleCancelPress}
             onOk={this.handleSubmit}
           >
-          <NewAlertForm
-            record={this.state.record}
-            wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
-          /> 
+            <NewAlertEventForm
+              record={this.state.record}
+              dicts={this.props.dictInfo}
+              wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
+            /> 
            
           </Modal>
         </div>
         <UITable
-          title={() => '预警事件'}
+          title='预警事件'
           dataSource={dataSource}
           columns={columns}
           size='small' />

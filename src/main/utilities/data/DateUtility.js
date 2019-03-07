@@ -9,8 +9,9 @@
 const DateUtility = {
     //yyyy-MM-dd hh:mm:ss.S   ==> 2006-07-02 08:09:04.423   
     //yyyy-M-d h:m:s.S   ==> 2006-7-2 8:9:4.18   
-    getFormatDate(fmt){  
-        var date = new Date();
+    getFormatDate(fmt,dateStr = null){  
+
+        var date = dateStr ? new Date(parseInt(dateStr)) : new Date();
       var o = {   
         "M+" : date.getMonth()+1,                 //月份   
         "d+" : date.getDate(),                    //日   

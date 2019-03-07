@@ -7,10 +7,11 @@ class VersionManageView extends React.Component {
     visible:false,
     actionType:null,
     record:null,
+    selectedRowKeys:[]
   };
 
   componentWillMount() {
-    this.props.versionManageInit();
+    this.props.versionUpdateInit();
   }
   handleEditPress(record,actionType) {
     this.setState({record,visible:true,actionType});
@@ -31,40 +32,30 @@ class VersionManageView extends React.Component {
     form.resetFields();
   }
 
+
+ 
+
   prepareMainTableData = () => {
     let dataSource = [];
     const columns = [
-      { title: '编号', dataIndex: 'verId', key: 'verId' },
-      { title: '版本号', dataIndex: 'version', key: 'version'},
-      { title: '更新包', dataIndex: 'filename', key: 'filename',searcher: true },
-      { title: '状态', dataIndex: 'status', key: 'status' },
-      { title: '描述', dataIndex: 'remark', key: 'remark' },
-      { title: '创建时间', dataIndex: 'createtime', key: 'createtime' },
-      { title: '更新时间', dataIndex: 'updatetime', key: 'updatetime' },
-      { title: '操作', key: 'operation', 
-        render: (text,record) => 
-          <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
-            <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
-            <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleCreatePress.bind(this,record,'nodeAdd')}>添加节点</a>
-          </span> 
-      },
+      { title: '应用名称', dataIndex: 'SYS_CODE', key: 'SYS_CODE' },
+      { title: '节点名称', dataIndex: 'NODE_NAME', key: 'NODE_NAME'},
+      { title: 'IP地址', dataIndex: 'HOST', key: 'HOST',searcher: true },
+      { title: '当前版本', dataIndex: 'VERSION', key: 'VERSION',searcher: true },
+      { title: '最新版本', dataIndex: 'LAST_VERSION', key: 'LAST_VERSION',searcher: true },
+      { title: '推送结果', dataIndex: 'PUSH_RESULT', key: 'PUSH_RESULT' },
+      { title: '换版结果', dataIndex: 'UPDATE_RESULT', key: 'UPDATE_RESULT' },
+     
     ];
    
-    for(let i = 0 ; i < this.props.versionList.length; i++){
+    for(let i = 0 ; i < this.props.sysNodeVersionlist.length; i++){
       dataSource.push({
         key: `mTb${i}`,
-          verId: this.props.versionList[i].verId,
-          version: this.props.versionList[i].version,
-          filename: this.props.versionList[i].filename,
-          status: this.props.versionList[i].status,
-          remark: this.props.versionList[i].remark,
-          createtime: this.props.versionList[i].createtime,
-          updatetime: this.props.versionList[i].updatetime
+        ...this.props.sysNodeVersionlist[i]
       })
     }
+    console.log('prepareMainTableData',dataSource);
+
     return {
       columns,
       dataSource
@@ -75,14 +66,17 @@ class VersionManageView extends React.Component {
 
     let columns = [],dataSource = [];
 
-    if(this.props.versionList && this.props.versionList.length > 0 && this.props.dictInfo){
+    if(this.props.sysNodeVersionlist && this.props.sysNodeVersionlist.length > 0 && this.props.dictInfo){
       ({columns,dataSource} = this.prepareMainTableData());
     }
+    console.log('render',dataSource);
+
     return (
       <Row>
         <Col span={24}>
-        <div style={{marginBottom:'15px'}}>
-            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'sysAdd')} >新建版本</Button>
+          <div style={{marginBottom:'15px'}}>
+            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'sysAdd')} >推送</Button>
+            <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'sysAdd')} >换版</Button>
             <Modal
               width={700}
               visible={this.state.visible}
@@ -96,7 +90,8 @@ class VersionManageView extends React.Component {
             </Modal>
           </div>
           <UITable
-            title={() => '版本管理'}
+            title='版本管理'
+            rowSelection={{selectedRowKeys:this.state.selectedRowKeys,onChange: (selectedRowKeys)=>{this.setState({selectedRowKeys})}}}
             dataSource={dataSource}
             columns={columns}
             size='small' />

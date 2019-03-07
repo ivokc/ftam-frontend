@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row,Col, Modal,Button,Divider} from 'antd';
+import {Row,Col, Modal,Button,Divider,Popconfirm} from 'antd';
 import {UITable} from '../../../main/components/UIComponents';
 import NewAlertForm from '../component/NewAlertDefForm';
 
@@ -22,8 +22,7 @@ class AlertDefView extends React.Component {
   }
 
   handleDeletePress(record,actionType) {
-    this.setState({record,actionType});
-
+    this.props.alertDefDelete(record);
   }
 
   handleCancelPress = () => {
@@ -39,8 +38,14 @@ class AlertDefView extends React.Component {
         return;
       }
       switch (this.state.actionType) {
-        case 'alertDefAdd':
-          this.props.alertDefInsert({...values,alertTime:values.alertTime.format('HH:mm:ss')});
+        case 'alertDefInsert':
+          this.props.alertDefInsert(values);
+          break;
+        case 'alertDefUpdate':
+          this.props.alertDefUpdate(values);
+          break;
+        case 'alertDefDelete':
+          this.props.alertDefDelete(values);
           break;
         default:
           break;
@@ -54,22 +59,22 @@ class AlertDefView extends React.Component {
   prepareMainTableData = () => {
     let dataSource = [];
     const columns = [
-      { title: '预警定义编号', dataIndex: 'alertDefId', key: 'alertDefId' },
-      { title: '预警周期', dataIndex: 'alertCycle', key: 'alertCycle'},
+      { title: '预警定义编号', dataIndex: 'alertDefId', key: 'alertDefId',searcher: true },
+      { title: '预警周期', dataIndex: 'alertCycle', key: 'alertCycle',searcher: true},
       { title: '预警定义名称', dataIndex: 'alertDefName', key: 'alertDefName',searcher: true },
-      { title: '预警实现', dataIndex: 'alertImpl', key: 'alertImpl' },
-      { title: '预警级别', dataIndex: 'alertLevel', key: 'alertLevel' },
-      { title: '预警描述', dataIndex: 'alertRemark', key: 'alertRemark' },
-      { title: '预警时间', dataIndex: 'alertTime', key: 'alertTime' },
-      { title: '任务定义编号', dataIndex: 'taskDefId', key: 'taskDefId' },
+      { title: '预警实现', dataIndex: 'alertImpl', key: 'alertImpl',searcher: true },
+      { title: '预警级别', dataIndex: 'alertLevel', key: 'alertLevel',searcher: true },
+      { title: '预警描述', dataIndex: 'alertRemark', key: 'alertRemark',searcher: true },
+      { title: '预警时间', dataIndex: 'alertTime', key: 'alertTime',searcher: true },
+      { title: '任务定义编号', dataIndex: 'taskDefId', key: 'taskDefId',searcher: true },
       { title: '操作', key: 'operation', 
         render: (text,record) => 
           <span>
-            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'sysUpdate')}>修改</a>
+            <a href="javascript:;" onClick={this.handleEditPress.bind(this,record,'alertDefUpdate')}>修改</a>
             <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleDeletePress.bind(this,record,'sysDelete')}>删除</a>
-            <Divider type="vertical" />
-            <a href="javascript:;" onClick={this.handleCreatePress.bind(this,record,'nodeAdd')}>添加节点</a>
+            <Popconfirm title="确定要删除此条?" onConfirm={this.handleDeletePress.bind(this,record,'alertDefDelete')}  okText="是" cancelText="否">
+              <a href="javascript:;">删除</a>
+            </Popconfirm>
           </span> 
       },
     ];
@@ -96,7 +101,7 @@ class AlertDefView extends React.Component {
       <Row>
       <Col span={24}>
       <div style={{marginBottom:'15px'}}>
-          <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'alertDefAdd')} >新建预警定义</Button>
+          <Button type="primary" onClick={this.handleCreatePress.bind(this,null,'alertDefInsert')} >新建预警定义</Button>
           <Modal
             width={700}
             visible={this.state.visible}
@@ -108,13 +113,15 @@ class AlertDefView extends React.Component {
           >
           <NewAlertForm
             record={this.state.record}
+            taskdefList={this.props.taskdefList}
             wrappedComponentRef={(formRef)=>{this.formRef = formRef}}
           /> 
            
           </Modal>
         </div>
         <UITable
-          title={() => '预警定义'}
+          searchText={this.props.searchText}
+          title='预警定义'
           dataSource={dataSource}
           columns={columns}
           size='small' />

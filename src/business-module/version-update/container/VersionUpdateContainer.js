@@ -1,26 +1,34 @@
 import { connect } from 'react-redux';
 import VersionUpdateView from '../view/VersionUpdateView';
-import {versionManageListTask} from '../vendor/Task';
+import {sysNodeVersionlistInterface} from '../vendor/Interface';
+import {getVersionUpdateListAction} from '../vendor/dataflow/Action'
 
 
+const versionUpdateInit = async (params={},dispatch) => {
+  try{
+    let result = await sysNodeVersionlistInterface(params);
+    console.log('versionUpdateInit',result)
+    dispatch(getVersionUpdateListAction(result))
+  }catch(error) {
+    console.log(error)
+  }
 
-const versionManageInit = (params={},dispatch) => {
-  versionManageListTask(dispatch);
 }
 
 
 
 
 const mapStateToProps = (state) => {
+  console.log('state.versionUpdateReducer',state.versionUpdateReducer);
   return {
-    versionList: state.versionReducer,
+    sysNodeVersionlist: state.versionUpdateReducer,
     dictInfo:state.dictReducer
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    versionManageInit: (params) => versionManageInit(params,dispatch)
+    versionUpdateInit: (params) => versionUpdateInit(params,dispatch)
   }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(VersionUpdateView);

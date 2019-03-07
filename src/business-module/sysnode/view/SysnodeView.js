@@ -180,13 +180,12 @@ class SysnodeView extends React.Component {
         ...record.sysNode[j]
       })
     }
-    return <UITable columns={columns2} dataSource={dataSource2} pagination={false} locale={{filterConfirm:'确定',filterReset:'重置',emptyText:'暂无数据'}} size='small'/>
+    return <UITable title='节点' searchText={this.props.searchText} columns={columns2} dataSource={dataSource2} pagination={false} locale={{filterConfirm:'确定',filterReset:'重置',emptyText:'暂无数据'}} size='small'/>
 
   }
 
 
   render() {
-
     let columns = [],dataSource = [];
 
     if(this.props.sysnodeList && this.props.sysnodeList.length > 0 && this.props.dictInfo){
@@ -221,7 +220,8 @@ class SysnodeView extends React.Component {
             </Modal>
           </div>
           <UITable
-            title={() => '系统节点'}
+            searchText={this.props.searchText}
+            title='系统'
             dataSource={dataSource}
             columns={columns}
             expandedRowRender={this.subTableRender}

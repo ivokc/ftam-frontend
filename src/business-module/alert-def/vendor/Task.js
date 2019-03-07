@@ -1,4 +1,4 @@
-import {alertDefListInterface,alertDefInsertInterface} from './Interface';
+import {alertDefListInterface,alertDefInsertInterface,alertDefUpdateInterface,alertDefDeleteInterface} from './Interface';
 import {getAlertDefListAction} from './dataflow/Action';
 
 async function alertDefListTask(dispatch){
@@ -13,10 +13,31 @@ async function alertDefInsertTask(params,dispatch){
     await alertDefInsertInterface(params);
     alertDefListTask(dispatch)
   }catch(error){
+    console.log(error)
+  }
+}
+
+async function alertDefUpdateTask(params,dispatch){
+  try {
+    await alertDefUpdateInterface(params);
+    alertDefListTask(dispatch)
+  }catch(error){
+    console.log(error)
+  }
+}
+
+async function alertDefDeleteTask(params,dispatch){
+  try {
+    await alertDefDeleteInterface(params);
+    alertDefListTask(dispatch)
+  }catch(error){
+    console.log(error)
   }
 }
 
 export {
   alertDefListTask,
-  alertDefInsertTask
+  alertDefInsertTask,
+  alertDefUpdateTask,
+  alertDefDeleteTask
 };

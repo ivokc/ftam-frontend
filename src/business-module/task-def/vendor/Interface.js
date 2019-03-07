@@ -13,12 +13,12 @@ function taskdeftasktriggerInsertInterface({destNode,destPath,endTime,
   const params = {
     taskDef: {
       destPath,
-      destNode,
+      destNode:destNode.reduce((acc, cur) => acc +',' + cur),
       endTime:endTime.format('YYYY-MM-DD HH:mm:ss'),
       options,
       remark:defremark,
       srcFileRule,
-      srcNode,
+      srcNode: srcNode.reduce((acc, cur) => acc +',' + cur),
       srcPath,
       startTime:startTime.format('YYYY-MM-DD HH:mm:ss'),
       status,
@@ -44,13 +44,13 @@ function taskdefUpdateInterface({destNode,destPath,endTime,
   options,defremark,srcFileRule,srcNode,srcPath,startTime,status,taskDefId,
   syncStatus,taskDefName,taskDefType}) {
   const params = {
-    destNode, 	//目标节点
+    destNode:destNode.reduce((acc, cur) => acc +',' + cur), 	//目标节点
     destPath, 	//目标路径
     endTime:endTime.format('YYYY-MM-DD HH:mm:ss'), 	//生效结束时间
     options, 	//任务选项
     remark:defremark, 	//备注
     srcFileRule, 	//源文件规则
-    srcNode, 	//源节点
+    srcNode:srcNode.reduce((acc, cur) => acc +',' + cur), 	//源节点
     srcPath, 	//源路径
     startTime:startTime.format('YYYY-MM-DD HH:mm:ss'), 	//生效起始时间
     status, 	//状态

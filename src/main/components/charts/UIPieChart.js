@@ -44,6 +44,7 @@ export default class UIPieChart extends React.Component {
                 outerRadius={100}
                 paddingAngle={2}
                 label={renderCustomizedLabel}
+                onClick={this.props.onPieClick}
               >
               {
                 data.map((entry, index) => {
@@ -71,6 +72,7 @@ export default class UIPieChart extends React.Component {
   static style = {
     container: {
       margin: 'auto',
+      cursor:'pointer'
     },
     bb: {
       width:'120px',

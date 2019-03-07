@@ -11,15 +11,17 @@ import {
   taskdefEnableTask,
   taskdefDisableTask,
 } from '../vendor/Task';
-
+import {sysnodeListTask} from '../../sysnode/vendor/Task';
 
 const taskdefInit = (params={},dispatch) => {
   taskdefListTask(dispatch);
+  sysnodeListTask(dispatch)
 }
 const taskdeftasktriggerInsert = (params={},dispatch) => {
   taskdeftasktriggerInsertTask(params,dispatch);
 }
 const taskdefUpdate = (params={},dispatch) => {
+
   taskdefUpdateTask(params,dispatch);
 }
 const tasktriggerUpdate = (params={},dispatch) => {
@@ -44,8 +46,9 @@ const taskdefDisable = (params={},dispatch) => {
 const mapStateToProps = (state) => {
   return {
     taskdefList: state.taskdefReducer,
-    dictInfo:state.dictReducer
-
+    dictInfo:state.dictReducer,
+    sysnodeList: state.sysnodeReducer,
+    searchText:state.searchReducer.searchText
   };
 };
 

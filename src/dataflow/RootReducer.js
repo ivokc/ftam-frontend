@@ -1,7 +1,8 @@
-import {USER_LOGIN,USER_LOGOUT,USER_FORGET,GET_MENU,GET_DICT} from './Action';
+import {USER_LOGIN,USER_LOGOUT,USER_FORGET,GET_MENU,SELECT_MENU,GET_DICT,ENTER_SEARCH} from './Action';
 import {monitorReducer} from '../business-module/monitor/vendor/dataflow/Reducer';
 import {sysnodeReducer} from '../business-module/sysnode/vendor/dataflow/Reducer';
-import {versionReducer} from '../business-module/version/vendor/dataflow/Reducer';
+import {versionManageReducer} from '../business-module/version-manage/vendor/dataflow/Reducer';
+import {versionUpdateReducer} from '../business-module/version-update/vendor/dataflow/Reducer';
 import {alertDefReducer} from '../business-module/alert-def/vendor/dataflow/Reducer';
 import {taskdefReducer} from '../business-module/task-def/vendor/dataflow/Reducer';
 import {alertEventReducer} from '../business-module/alert-event/vendor/dataflow/Reducer';
@@ -29,12 +30,31 @@ function userReducer(state = null, action){
   }
 }
 
-function menuReducer(state = null, action) {
+function searchReducer(state = {searchText:''}, action) {
+  switch (action.type) {
+    case ENTER_SEARCH:
+      return {
+        searchText: action.payload
+      }
+    default:
+      return state;
+  }
+}
+
+function menuReducer(state = {selected:'monitor',menus:null}, action) {
   switch (action.type) {
     case GET_MENU:
-      return [
-        ...action.payload
-      ];
+      return {
+        ...state,
+        menus:[
+          ...action.payload
+        ]};
+
+    case SELECT_MENU:
+      return {
+        ...state,
+        selected: action.payload
+      }
     default:
       return state;
   }
@@ -54,12 +74,14 @@ function dictReducer(state = null,action) {
 
 export default {
     userReducer,
+    searchReducer,
     menuReducer,
     dictReducer,
     monitorReducer,
     sysnodeReducer,
-    versionReducer,
+    versionManageReducer,
     alertDefReducer,
     taskdefReducer,
     alertEventReducer,
+    versionUpdateReducer
 }

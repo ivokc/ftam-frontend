@@ -1,13 +1,12 @@
 
 
-function versionManageListInterface() {
+function sysNodeVersionlistInterface() {
   const params = {
-
   };
-  return global.Just.postRequest(global.Url.versionList,params);
+  return global.Just.postRequest(global.Url.sysNodeVersionlist,params);
 }
 
 
 export {
-  versionManageListInterface
+  sysNodeVersionlistInterface
 }

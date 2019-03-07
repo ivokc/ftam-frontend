@@ -1,9 +1,9 @@
-import {GET_VERSIONMANAGE_LIST} from './Action';
+import {GET_VERSIONUPDATE_LIST} from './Action';
 
 
-function versionReducer(state = null, action){
+function versionUpdateReducer(state = null, action){
   switch (action.type) {
-    case GET_VERSIONMANAGE_LIST:
+    case GET_VERSIONUPDATE_LIST:
       return [
         ...action.payload
       ];
@@ -13,5 +13,5 @@ function versionReducer(state = null, action){
 }
 
 export {
-  versionReducer,
+  versionUpdateReducer,
 }

@@ -1,7 +1,6 @@
 import React from 'react';
-import {Form, Input ,Col,Row,Tabs,DatePicker,Badge,Modal,Select} from 'antd';
+import {Form, Input ,Col,Row,Tabs,DatePicker,Badge,Modal,TreeSelect,InputNumber} from 'antd';
 const TabPane = Tabs.TabPane;
-const Option = Select.Option;
 
 class NewTaskDefForm extends React.Component {
 
@@ -22,9 +21,11 @@ class NewTaskDefForm extends React.Component {
     this.setState({defErrors:0,triggerErrors:0});
     this.props.handleCancelPress();
   }
+  
   handleSubmit = () => {
     const form = this.props.form;
     form.validateFields((err, values) => {
+      console.log('validateFields',values);
       if (err) {
 
         let errors = Object.keys(err);
@@ -45,14 +46,30 @@ class NewTaskDefForm extends React.Component {
   }
   render() {
     const formItemLayout = {
-          labelCol: {
-             span: 8 ,
-          },
-          wrapperCol: {
-             span: 14 ,
-          },
-        };
+      labelCol: {
+          span: 8 ,
+      },
+      wrapperCol: {
+          span: 14 ,
+      },
+    };
     const { getFieldDecorator } = this.props.form;
+
+
+    console.log('this.props.nodeInfo',this.props.nodeInfo)
+    let treeData = !this.props.nodeInfo ? null : this.props.nodeInfo.map((mainele) => ({
+      title: mainele.sys.sysName,
+      value: mainele.sys.sysCode,
+      key: mainele.sys.sysCode,
+      children: mainele.sysNode.map((subele) => ({
+        title: subele.nodeName,
+        value: subele.nodeCode,
+        key: subele.nodeCode,
+      })),
+    }));
+  
+
+
 
     return (
 
@@ -80,9 +97,9 @@ class NewTaskDefForm extends React.Component {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item {...formItemLayout} label="任务类型:">
-                    {getFieldDecorator('taskDefType', {
-                      rules: [{ required: true, message: '请填写 任务类型!' }],
+                  <Form.Item {...formItemLayout} label="源文件规则:">
+                    {getFieldDecorator('srcFileRule', {
+                      rules: [{ required: true, message: '请填写 源文件规则!' }],
                     })(
                       <Input  />
                     )}
@@ -94,6 +111,51 @@ class NewTaskDefForm extends React.Component {
                   <Form.Item {...formItemLayout} label="目标节点:">
                     {getFieldDecorator('destNode', {
                       rules: [{ required: true, message: '请填写 目标节点!' }],
+                    })(
+                      <TreeSelect 
+                        treeData={treeData}
+                        // showSearch
+                        style={{ width: 520 }}
+                        // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        placeholder="请选择"
+                        treeCheckable={true}
+                        showCheckedStrategy='SHOW_PARENT'
+                        allowClear
+                        treeDefaultExpandAll
+                        onChange={this.onChange}
+                       />
+                    )}
+                  </Form.Item>
+                </Col>
+                
+              </Row>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Form.Item {...formItemLayout} label="源节点:">
+                    {getFieldDecorator('srcNode', {
+                      rules: [{ required: true, message: '请填写 源节点!' }],
+                    })(
+                      <TreeSelect 
+                        treeData={treeData}
+                        // showSearch
+                        style={{ width: 520 }}
+                        // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        placeholder="请选择"
+                        treeCheckable={true}
+                        showCheckedStrategy='SHOW_PARENT'
+                        allowClear
+                        treeDefaultExpandAll
+                        onChange={this.onChange}
+                       />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Form.Item {...formItemLayout} label="源路径:">
+                    {getFieldDecorator('srcPath', {
+                      rules: [{ required: true, message: '请填写 源路径!' }],
                     })(
                       <Input  />
                     )}
@@ -127,7 +189,6 @@ class NewTaskDefForm extends React.Component {
                 <Col span={12}>
                   <Form.Item {...formItemLayout} label="生效结束时间:">
                     {getFieldDecorator('endTime', {
-                      rules: [{ required: true, message: '请填写 生效结束时间!' }],
                     })(
                       <DatePicker
                         showTime
@@ -141,29 +202,8 @@ class NewTaskDefForm extends React.Component {
               </Row>
               <Row gutter={24}>
                 <Col span={12}>
-                  <Form.Item {...formItemLayout} label="源节点:">
-                    {getFieldDecorator('srcNode', {
-                      rules: [{ required: true, message: '请填写 源节点!' }],
-                    })(
-                      <Input  />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item {...formItemLayout} label="源路径:">
-                    {getFieldDecorator('srcPath', {
-                      rules: [{ required: true, message: '请填写 源路径!' }],
-                    })(
-                      <Input  />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col span={12}>
                   <Form.Item {...formItemLayout} label="任务选项:">
                     {getFieldDecorator('options', {
-                      rules: [{ required: true, message: '请填写 任务选项!' }],
                     })(
                       <Input  />
                     )}
@@ -172,14 +212,13 @@ class NewTaskDefForm extends React.Component {
                 <Col span={12}>
                   <Form.Item {...formItemLayout} label="备注:">
                     {getFieldDecorator('defremark', {
-                      rules: [{ required: true, message: '请填写 备注!' }],
                     })(
                       <Input  />
                     )}
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={24}>
+              {/* <Row gutter={24}>
                 <Col span={12}>
                   <Form.Item {...formItemLayout} label="状态:">
                     {getFieldDecorator('status', {
@@ -212,18 +251,7 @@ class NewTaskDefForm extends React.Component {
                     )}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col span={12}>
-                  <Form.Item {...formItemLayout} label="源文件规则:">
-                    {getFieldDecorator('srcFileRule', {
-                      rules: [{ required: true, message: '请填写 源文件规则!' }],
-                    })(
-                      <Input  />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
+              </Row> */}
             </TabPane>
             <TabPane tab={<Badge count={this.state.triggerErrors} offset={[13,0]}><span>任务触发</span></Badge>} key="2">
               <Row gutter={24}>
@@ -241,7 +269,8 @@ class NewTaskDefForm extends React.Component {
                     {getFieldDecorator('interval', {
                       rules: [{ required: true, message: '请填写 时间间隔!' }],
                     })(
-                      <Input  />
+                      <InputNumber min={1} />,
+
                     )}
                   </Form.Item>
                 </Col>
@@ -257,23 +286,6 @@ class NewTaskDefForm extends React.Component {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item {...formItemLayout} label="触发类型:">
-                    {getFieldDecorator('trigerType', {
-                      rules: [{ required: true, message: '请填写 触发类型!' }],
-                    })(
-                      <Select>
-                        {
-                          this.props.dicts ? this.props.dicts.tasktrigger_trigertype.items.map((ele,i) => 
-                            <Option key={i} value={ele.code}>{ele.name}</Option>
-                          ) : null
-                        }
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col span={12}>
                   <Form.Item {...formItemLayout} label="备注:">
                     {getFieldDecorator('triggerremark', {
                       rules: [{ required: true, message: '请填写 备注!' }],
@@ -283,6 +295,7 @@ class NewTaskDefForm extends React.Component {
                   </Form.Item>
                 </Col>
               </Row>
+             
             </TabPane>
           </Tabs>
         </Form>

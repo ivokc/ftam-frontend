@@ -43,8 +43,8 @@ const nodeDelete = (params={},dispatch) => {
 const mapStateToProps = (state) => {
   return {
     sysnodeList: state.sysnodeReducer,
-    dictInfo:state.dictReducer
-
+    dictInfo:state.dictReducer,
+    searchText:state.searchReducer.searchText
   };
 };
 
@@ -58,6 +58,7 @@ const mapDispatchToProps = (dispatch) => {
     nodeUpdate: (params) => nodeUpdate(params,dispatch),
     sysDelete: (params) => sysDelete(params,dispatch),
     nodeDelete: (params) => nodeDelete(params,dispatch),
+    
   }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(SysnodeView);
